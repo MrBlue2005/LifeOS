@@ -38,9 +38,14 @@ export async function AppShell({ children }: AppShellProps) {
               </button>
             </form>
           ) : (
-            <Link className="quiet-button" href="/auth/sign-in">
-              Sign in
-            </Link>
+            <nav className="auth-nav" aria-label="Account">
+              <Link className="quiet-button" href="/auth/sign-in">
+                Sign in
+              </Link>
+              <Link className="account-create-link" href="/auth/sign-up">
+                Create account
+              </Link>
+            </nav>
           )}
         </div>
       </header>

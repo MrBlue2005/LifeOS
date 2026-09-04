@@ -4,8 +4,9 @@ export function ConfigurationRequired() {
       <p className="eyebrow">Setup required</p>
       <h1 id="configuration-title">Connect RX LifeOS to Supabase</h1>
       <p className="placeholder-copy">
-        Add the two public Supabase values described in the project README, then
-        restart the development server.
+        Create <code>.env.local</code> beside <code>package.json</code>, add the
+        two public Supabase values described in the project README, then restart
+        the development server.
       </p>
     </section>
   );

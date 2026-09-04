@@ -115,6 +115,12 @@ button:focus-visible {
   gap: 0.6rem;
 }
 
+.auth-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 .quiet-button {
   display: inline-flex;
   min-height: 2.25rem;
@@ -132,6 +138,22 @@ button:focus-visible {
 .quiet-button:hover {
   border-color: #4a5962;
   color: var(--text);
+}
+
+.account-create-link {
+  display: inline-flex;
+  min-height: 2.25rem;
+  align-items: center;
+  border-radius: 0.55rem;
+  background: var(--accent);
+  color: #07100d;
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 0.4rem 0.7rem;
+}
+
+.account-create-link:hover {
+  background: var(--accent-strong);
 }
 
 .site-main {

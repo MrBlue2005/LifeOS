@@ -286,6 +286,8 @@ Phase 0 uses the App Router for composition, small shared shell components under
 
 Core now provides email/password authentication and cookie-based Supabase SSR infrastructure. Find It owns its validation, hierarchy utilities, server actions, user-scoped queries, and route UI. PostgreSQL constraints and RLS remain the final authorization/integrity boundary even though server actions also derive and filter by the verified user ID. Buy Later remains independent and unimplemented.
 
+Phase 1 has been manually validated against the remote Supabase development project: authentication, authenticated location hierarchy CRUD, item CRUD and movement, deterministic search, complete path retrieval, safe non-empty location deletion blocking, and cross-user visibility isolation all succeeded in the tested workflow. Repository lint, type checking, unit/domain tests, and production builds are automatically validated. The pgTAP suite remains unexecuted because it depends on a local Supabase/PostgreSQL environment and Supabase testing helpers; those helpers were intentionally not added to the remote development database solely for test execution.
+
 ## Open decisions
 
 These decisions should be made before the related implementation, not guessed now:

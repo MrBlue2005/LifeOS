@@ -37,7 +37,7 @@ Priority labels:
 
 ## Find It MVP — first implementation priority
 
-**Implementation status:** The Phase 1 code implements the MUST HAVE save/find/edit loop with user-only ownership, email/password Supabase Auth, current placement only, case-insensitive partial name search, generic hierarchical locations, blocked non-empty location deletion, and explicit item hard-delete. Live Supabase migration/RLS/auth validation remains an environment setup step.
+**Implementation and validation status:** The Phase 1 code implements the MUST HAVE save/find/edit loop with user-only ownership, email/password Supabase Auth, current placement only, case-insensitive partial name search, generic hierarchical locations, blocked non-empty location deletion, and explicit item hard-delete. The loop has been manually validated against the remote Supabase development project, including cross-user RLS isolation. Lint, type checking, unit/domain tests, and the production build pass automatically. The local-oriented pgTAP database suite has not yet been executed.
 
 ### Core success story
 

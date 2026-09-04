@@ -40,7 +40,7 @@ The RX LifeOS shell runs locally, exposes its two placeholder modules through a 
 
 ## Phase 1 — Find It MVP
 
-**Status:** Implemented in the application and migration. Final operational validation requires applying the migration to a connected Supabase project and exercising email authentication and RLS there.
+**Status:** Implemented and operationally validated against the remote Supabase development project. Email/password authentication, the authenticated save/find/edit/move workflow, deterministic search with full paths, safe non-empty location deletion, and cross-user RLS isolation passed manual validation. Automated lint, type checking, unit/domain tests, and the production build pass. The local-oriented pgTAP database suite has not yet been executed.
 
 ### Objective
 

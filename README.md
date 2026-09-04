@@ -63,11 +63,19 @@ npm test
 npm run build
 ```
 
-The repository also contains [pgTAP RLS tests](supabase/tests/find_it_rls.test.sql). Running them requires a Supabase CLI local database with the current Supabase test helpers installed:
+Phase 1 validation status:
+
+- **Automatically validated:** lint, TypeScript type checking, unit/domain tests, and the production build.
+- **Manually validated against the remote Supabase development project:** email/password sign-up and sign-in, authenticated Find It access, root and nested location hierarchy CRUD exercised in the tested workflow, item CRUD and movement exercised in the tested workflow, deterministic partial search, complete location paths, non-empty location deletion protection, and cross-user data isolation through RLS.
+- **Not yet executed:** the repository's [pgTAP database test suite](supabase/tests/find_it_rls.test.sql).
+
+The pgTAP suite targets a Supabase CLI local database with the current Supabase testing helpers, including the `tests` schema:
 
 ```bash
 npx supabase@latest test db
 ```
+
+It has not been described as passing. It remains available for a future local Supabase/PostgreSQL test environment; the remote development database was not modified solely to install its local-oriented test harness.
 
 ## Architecture
 

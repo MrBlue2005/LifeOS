@@ -10,7 +10,9 @@ export function ModuleLauncher() {
           <Link href={moduleDefinition.href}>
             <div className="module-card-header">
               <h3>{moduleDefinition.name}</h3>
-              <span className="status-label">Coming soon</span>
+              <span className="status-label">
+                {moduleDefinition.status === "available" ? "Available" : "Coming soon"}
+              </span>
             </div>
             <p className="module-description">{moduleDefinition.description}</p>
             <span className="module-action" aria-hidden="true">

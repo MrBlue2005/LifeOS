@@ -5,5 +5,5 @@ export const findItModule = {
   name: "Find It",
   description: "Know where everything is.",
   href: "/find-it",
-  status: "coming-soon",
+  status: "available",
 } satisfies LifeOSModuleDefinition;

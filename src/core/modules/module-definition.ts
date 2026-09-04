@@ -1,4 +1,4 @@
-export type ModuleStatus = "coming-soon";
+export type ModuleStatus = "available" | "coming-soon";
 
 export type LifeOSModuleDefinition = Readonly<{
   id: string;

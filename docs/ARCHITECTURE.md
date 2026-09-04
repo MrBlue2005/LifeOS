@@ -268,6 +268,10 @@ docs/
 
 Public module entry points should expose only necessary commands, queries, and UI composition. Directory layers should not be created empty merely to match this diagram.
 
+### Phase 0 implementation boundary
+
+Phase 0 uses the App Router for composition, small shared shell components under `src/core/components`, and one typed registry under `src/core/modules`. Find It and Buy Later each expose only a public module definition from their module root. Domain, application, infrastructure, database, authentication, storage, notification, and AI directories will be introduced only when they gain a real caller in a later phase.
+
 ## Open decisions
 
 These decisions should be made before the related implementation, not guessed now:
@@ -286,4 +290,3 @@ These decisions should be made before the related implementation, not guessed no
 ## Rejected for the current architecture
 
 Microservices, Redis, message brokers, complex queues, dedicated vector databases, separate Python/FastAPI services, Kubernetes, universal scraping infrastructure, and a generic plugin system have no current requirement and should not be introduced.
-

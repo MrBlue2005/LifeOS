@@ -18,8 +18,8 @@ Create the smallest secure platform foundation on which Find It can be built wit
 
 - Confirm the Next.js/React/TypeScript scaffold and repository conventions.
 - Establish strict TypeScript, formatting, linting, testing, and environment validation.
-- Define the chosen authentication methods and ownership model.
-- Establish PostgreSQL/Supabase integration, migrations, Row Level Security patterns, and local/deployment environment separation.
+- Preserve authentication and ownership as explicit Phase 1 entry decisions without implementing them prematurely.
+- Record the PostgreSQL/Supabase direction and environment boundary without clients, schemas, migrations, or credentials.
 - Establish the RX LifeOS application shell and initial mobile-first design tokens when UI work is authorized.
 - Define server/client boundaries, validation patterns, secure secret handling, and minimal safe observability.
 - Define private storage behavior before accepting images.
@@ -27,11 +27,12 @@ Create the smallest secure platform foundation on which Find It can be built wit
 
 ### Success condition
 
-An authenticated user can enter a minimal RX LifeOS shell, and automated checks plus authorization tests demonstrate a safe foundation for owner-scoped Find It data.
+The RX LifeOS shell runs locally, exposes its two placeholder modules through a tested typed registry, and passes linting, strict type checking, unit tests, and a production build without external credentials.
 
 ### Explicit non-goals
 
 - Implementing the Find It or Buy Later product loops.
+- Implementing authentication, ownership, PostgreSQL/Supabase, migrations, or Row Level Security.
 - Finalizing the complete visual design system.
 - Configuring AI providers without a Phase 1 requirement.
 - Building notifications beyond the smallest foundation actually needed.

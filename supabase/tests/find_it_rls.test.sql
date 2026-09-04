@@ -1,6 +1,25 @@
 begin;
 
-select plan(15);
+select plan(19);
+
+select tests.rls_enabled('public', 'find_it_locations');
+select tests.rls_enabled('public', 'find_it_items');
+
+select ok(
+  not has_table_privilege('anon', 'public.find_it_locations', 'select')
+  and not has_table_privilege('anon', 'public.find_it_locations', 'insert')
+  and not has_table_privilege('anon', 'public.find_it_locations', 'update')
+  and not has_table_privilege('anon', 'public.find_it_locations', 'delete'),
+  'anonymous requests hold no location table privileges'
+);
+
+select ok(
+  not has_table_privilege('anon', 'public.find_it_items', 'select')
+  and not has_table_privilege('anon', 'public.find_it_items', 'insert')
+  and not has_table_privilege('anon', 'public.find_it_items', 'update')
+  and not has_table_privilege('anon', 'public.find_it_items', 'delete'),
+  'anonymous requests hold no item table privileges'
+);
 
 select tests.create_supabase_user('find_it_owner');
 select tests.create_supabase_user('find_it_other_user');

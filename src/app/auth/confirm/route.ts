@@ -1,6 +1,7 @@
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 
+import { getSupabasePublicConfig } from "@/core/config/supabase";
 import { createSupabaseServerClient } from "@/core/supabase/server";
 
 const allowedOtpTypes = new Set<EmailOtpType>([
@@ -13,6 +14,12 @@ const allowedOtpTypes = new Set<EmailOtpType>([
 ]);
 
 export async function GET(request: NextRequest) {
+  if (!getSupabasePublicConfig()) {
+    return NextResponse.redirect(
+      new URL("/auth/sign-in?configuration=missing", request.url),
+    );
+  }
+
   const tokenHash = request.nextUrl.searchParams.get("token_hash");
   const type = request.nextUrl.searchParams.get("type");
 

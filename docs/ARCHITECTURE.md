@@ -131,7 +131,7 @@ Prefer Next.js server capabilities and ordinary request/response operations. Int
 
 ## Data ownership and preliminary model
 
-PostgreSQL is the durable source of truth. Each domain record must be scoped to an owning principal. The exact principal is an open decision: it may initially be a user, or a household/workspace with memberships if sharing is required in the first release.
+PostgreSQL is the durable source of truth. For the Find It MVP, each location and item belongs directly to one authenticated Supabase user. Household/workspace ownership is intentionally deferred; the use of explicit UUID ownership columns and same-owner relationship constraints leaves room for a deliberate future migration without introducing speculative ownership abstractions now.
 
 Preliminary domain concepts—not migration-ready schemas—are:
 
@@ -150,6 +150,14 @@ Rules:
 - Add audit/history records only for a defined product or recovery need; movement history is expected for Find It but need not block its first useful flow.
 - Use transactions for tree changes, item moves, decisions, and other multi-record invariants.
 
+### Find It MVP schema
+
+`public.find_it_locations` stores `id`, `user_id`, `name`, nullable `parent_id`, and timestamps. A composite `(user_id, parent_id)` foreign key ensures a parent belongs to the same user. A trigger prevents cycles, with a per-user transaction advisory lock to make concurrent hierarchy moves safe. Sibling names are unique case-insensitively. Deletion is restricted while child locations or items exist.
+
+`public.find_it_items` stores `id`, `user_id`, `name`, optional `description`, required `location_id`, and timestamps. Its composite `(user_id, location_id)` foreign key requires the current location to belong to the same user. Items use explicit permanent deletion in this MVP; movement history and archives are not stored.
+
+Both tables derive `user_id` from `auth.uid()` by default, validate field lengths in PostgreSQL, update timestamps through triggers, and have indexes for ownership and relationships.
+
 ## Search architecture
 
 Find It search should advance only as observed needs justify it:
@@ -162,6 +170,8 @@ Find It search should advance only as observed needs justify it:
 6. LLM-assisted interpretation only for genuinely ambiguous queries.
 
 After an item is identified, location retrieval is a normal authorized database query. Do not send the user's inventory wholesale to an LLM.
+
+The implemented MVP uses an escaped, case-insensitive partial `ILIKE` match on item name. The server loads the authenticated user's location rows and derives each result's complete path with bounded application-side parent traversal. No path cache, full-text index, alias search, fuzzy matching, vectors, or AI is present.
 
 ## AI gateway
 
@@ -202,11 +212,11 @@ Start with the smallest channel that supports the chosen PWA/user experience. In
 
 ## Authentication and authorization
 
-Supabase Auth is the preferred initial identity provider. The server validates the authenticated session. PostgreSQL Row Level Security provides defense in depth and should enforce ownership boundaries even if application checks fail.
+Supabase Auth is the implemented identity provider. The MVP supports email/password sign-up, email confirmation, sign-in, and sign-out. The Next.js 16 proxy and server client use `@supabase/ssr` cookie adapters; server authorization uses verified `auth.getClaims()` results rather than trusting cookie session data.
 
 Authorization must verify both the requested record and its ownership scope. Client-supplied owner IDs are not trusted. Service-role credentials, if required, remain server-only and are used narrowly; ordinary user operations should preserve user-scoped database enforcement.
 
-The initial sign-in methods, account recovery policy, and whether household sharing ships in the first MVP remain open.
+All application data access and mutations currently use server-side, publishable-key clients carrying the user's cookie session. The application does not use a service-role key. Direct browser Supabase data access is not needed in this MVP. Password recovery and social providers remain deferred.
 
 ## Security model
 
@@ -272,20 +282,22 @@ Public module entry points should expose only necessary commands, queries, and U
 
 Phase 0 uses the App Router for composition, small shared shell components under `src/core/components`, and one typed registry under `src/core/modules`. Find It and Buy Later each expose only a public module definition from their module root. Domain, application, infrastructure, database, authentication, storage, notification, and AI directories will be introduced only when they gain a real caller in a later phase.
 
+### Phase 1 implementation boundary
+
+Core now provides email/password authentication and cookie-based Supabase SSR infrastructure. Find It owns its validation, hierarchy utilities, server actions, user-scoped queries, and route UI. PostgreSQL constraints and RLS remain the final authorization/integrity boundary even though server actions also derive and filter by the verified user ID. Buy Later remains independent and unimplemented.
+
 ## Open decisions
 
 These decisions should be made before the related implementation, not guessed now:
 
-1. **Ownership scope:** user-only Find It MVP versus household/workspace sharing from day one. This affects schema, RLS, invitations, and privacy.
-2. **Authentication methods:** exact providers, recovery flows, and session policy.
-3. **Initial notification channel:** in-app only, email, or web push; browser support and consent UX must be evaluated.
-4. **Image policy:** maximum size, EXIF handling, retention after AI analysis, deletion timing, and acceptable Gemini/provider data terms.
-5. **Find It history:** whether movement history is required in the first public MVP or can follow the basic save/find loop.
-6. **Search threshold:** what measured failure rate justifies fuzzy, semantic, or LLM-assisted search.
-7. **Buy Later extraction:** manual entry versus limited browser-side/metadata-assisted capture in its first release.
-8. **Price tracking:** supported merchants/methods, legal and Terms of Service review, reliability target, and cost ceiling before any automation.
-9. **Deployment regions and data residency:** driven by target users and privacy obligations.
-10. **Deletion/export requirements:** exact account, module-data, image, and derived-record lifecycle before production launch.
+1. **Initial notification channel:** in-app only, email, or web push; browser support and consent UX must be evaluated.
+2. **Image policy:** maximum size, EXIF handling, retention after AI analysis, deletion timing, and acceptable Gemini/provider data terms.
+3. **Search threshold:** what measured failure rate justifies fuzzy, semantic, or LLM-assisted search.
+4. **Buy Later extraction:** manual entry versus limited browser-side/metadata-assisted capture in its first release.
+5. **Price tracking:** supported merchants/methods, legal and Terms of Service review, reliability target, and cost ceiling before any automation.
+6. **Deployment regions and data residency:** driven by target users and privacy obligations.
+7. **Deletion/export requirements:** exact account, module-data, image, and derived-record lifecycle before production launch.
+8. **Find It evolution:** whether observed use justifies aliases, movement history, or non-AI photo attachments after the manual save/find loop is validated.
 
 ## Rejected for the current architecture
 

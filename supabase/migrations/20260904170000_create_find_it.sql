@@ -80,6 +80,12 @@ begin
     return new;
   end if;
 
+  -- Serialize hierarchy changes per owner so two concurrent moves cannot
+  -- independently pass the cycle check and commit a cycle together.
+  perform pg_catalog.pg_advisory_xact_lock(
+    pg_catalog.hashtextextended(new.user_id::text, 0)
+  );
+
   with recursive ancestors (id, parent_id) as (
     select location.id, location.parent_id
     from public.find_it_locations as location

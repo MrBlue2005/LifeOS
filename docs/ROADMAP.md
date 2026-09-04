@@ -40,6 +40,8 @@ The RX LifeOS shell runs locally, exposes its two placeholder modules through a 
 
 ## Phase 1 — Find It MVP
 
+**Status:** Implemented in the application and migration. Final operational validation requires applying the migration to a connected Supabase project and exercising email authentication and RLS there.
+
 ### Objective
 
 Make the promise **“I saved where something is, and later RX LifeOS helped me find it”** dependable for real use.
@@ -70,6 +72,7 @@ Target users repeatedly save items into arbitrary nested locations and later ret
 - Bulk scanning, OCR, barcode workflows, or advanced offline synchronization.
 - Cross-module intelligence.
 - Hardcoded home/room/shelf/container levels.
+- Movement history, which remains deferred until user evidence shows it is needed.
 
 ## Phase 2 — Buy Later MVP
 

@@ -37,6 +37,8 @@ Priority labels:
 
 ## Find It MVP — first implementation priority
 
+**Implementation status:** The Phase 1 code implements the MUST HAVE save/find/edit loop with user-only ownership, email/password Supabase Auth, current placement only, case-insensitive partial name search, generic hierarchical locations, blocked non-empty location deletion, and explicit item hard-delete. Live Supabase migration/RLS/auth validation remains an environment setup step.
+
 ### Core success story
 
 **“I saved where something is, and later RX LifeOS helped me find it.”**

@@ -12,6 +12,8 @@ describe("getSafeRedirectPath", () => {
   it("rejects external and protocol-relative redirects", () => {
     expect(getSafeRedirectPath("https://example.com")).toBe("/find-it");
     expect(getSafeRedirectPath("//example.com")).toBe("/find-it");
+    expect(getSafeRedirectPath("/\\example.com")).toBe("/find-it");
+    expect(getSafeRedirectPath("/find-it\nSet-Cookie: bad=1")).toBe("/find-it");
   });
 
   it("uses a caller-provided fallback for a missing path", () => {

@@ -7,3 +7,12 @@ export const findItModule = {
   href: "/find-it",
   status: "available",
 } satisfies LifeOSModuleDefinition;
+
+export {
+  FindItConfigurationRequired,
+  FindItHomeScreen,
+  ItemDetailScreen,
+  LocationsScreen,
+  NewItemScreen,
+} from "./screens";
+export { requireFindItUser } from "./access";

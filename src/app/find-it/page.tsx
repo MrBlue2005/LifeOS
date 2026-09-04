@@ -1,18 +1,30 @@
 import type { Metadata } from "next";
 
-import { ModulePlaceholder } from "@/core/components/module-placeholder";
-import { findItModule } from "@/modules/find-it";
+import {
+  FindItConfigurationRequired,
+  FindItHomeScreen,
+  findItModule,
+  requireFindItUser,
+} from "@/modules/find-it";
 
 export const metadata: Metadata = {
   title: findItModule.name,
   description: findItModule.description,
 };
 
-export default function FindItPage() {
-  return (
-    <ModulePlaceholder
-      moduleDefinition={findItModule}
-      phaseNote="Find It will be the first fully implemented RX LifeOS module. Object and location features begin in Phase 1."
-    />
-  );
+export const dynamic = "force-dynamic";
+
+type FindItPageProps = Readonly<{
+  searchParams: Promise<{ notice?: string; q?: string }>;
+}>;
+
+export default async function FindItPage({ searchParams }: FindItPageProps) {
+  const user = await requireFindItUser("/find-it");
+
+  if (!user) {
+    return <FindItConfigurationRequired />;
+  }
+
+  const { notice, q } = await searchParams;
+  return <FindItHomeScreen notice={notice} rawQuery={q} userId={user.id} />;
 }

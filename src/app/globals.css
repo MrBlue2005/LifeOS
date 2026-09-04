@@ -396,6 +396,305 @@ h2 {
   text-underline-offset: 0.2em;
 }
 
+.find-it-page {
+  display: grid;
+  gap: 2rem;
+}
+
+.narrow-page {
+  max-width: 46rem;
+}
+
+.module-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.module-heading h1 {
+  max-width: 15ch;
+  font-size: clamp(2.3rem, 8vw, 4.6rem);
+}
+
+.heading-copy,
+.current-location {
+  max-width: 38rem;
+  margin: 1rem 0 0;
+  color: var(--text-muted);
+}
+
+.current-location {
+  color: var(--accent-strong);
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.primary-link,
+.secondary-link {
+  display: inline-flex;
+  min-height: 2.8rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.65rem;
+  font-weight: 700;
+  padding: 0.6rem 0.9rem;
+}
+
+.primary-link {
+  background: var(--accent);
+  color: #07100d;
+}
+
+.secondary-link {
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.primary-link:hover {
+  background: var(--accent-strong);
+}
+
+.secondary-link:hover {
+  border-color: #4a5962;
+  color: var(--text);
+}
+
+.notice {
+  margin: 0;
+  border: 1px solid #355c50;
+  border-radius: 0.7rem;
+  background: #13241f;
+  color: var(--accent-strong);
+  padding: 0.8rem 1rem;
+}
+
+.search-form {
+  display: grid;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+  gap: 0.55rem;
+  padding: 1rem;
+}
+
+.search-form > label {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.65rem;
+}
+
+.search-input {
+  min-width: 0;
+}
+
+.results-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.horizontal-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+}
+
+.horizontal-heading > span {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+.item-results,
+.location-tree {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 0.65rem;
+  list-style: none;
+}
+
+.item-results li,
+.location-row {
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: var(--surface);
+}
+
+.item-results a {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1rem;
+}
+
+.item-results a:hover {
+  background: var(--surface-strong);
+}
+
+.item-results strong {
+  font-size: 1.05rem;
+}
+
+.item-results span {
+  color: var(--text-muted);
+}
+
+.item-results .result-path {
+  color: var(--accent-strong);
+  font-weight: 650;
+}
+
+.empty-state {
+  border: 1px dashed #39454d;
+  border-radius: 0.9rem;
+  color: var(--text-muted);
+  padding: 1.25rem;
+}
+
+.prominent-empty {
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+}
+
+.empty-state h2,
+.empty-state h3 {
+  margin: 0;
+  color: var(--text);
+}
+
+.empty-state p {
+  margin: 0.65rem 0 1.1rem;
+}
+
+.location-layout {
+  display: grid;
+  align-items: start;
+  gap: 1.5rem;
+}
+
+.panel,
+.location-browser {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+  padding: 1.25rem;
+}
+
+.panel > h2,
+.location-browser > h2,
+.danger-zone > h2 {
+  margin: 0;
+}
+
+.location-browser {
+  display: grid;
+  gap: 1rem;
+}
+
+.location-row details {
+  overflow: hidden;
+}
+
+.location-row summary {
+  display: grid;
+  cursor: pointer;
+  gap: 0.2rem;
+  padding: 0.9rem 1rem;
+}
+
+.location-row summary::marker {
+  color: var(--accent);
+}
+
+.location-name {
+  font-weight: 700;
+}
+
+.location-path {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.location-editor {
+  display: grid;
+  border-top: 1px solid var(--border);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.compact-form {
+  margin: 0;
+}
+
+.danger-zone {
+  margin-top: 1.5rem;
+  border: 1px solid #53363b;
+  border-radius: 0.8rem;
+  background: #211417;
+  padding: 1rem;
+}
+
+.location-editor .danger-zone {
+  margin: 0;
+}
+
+.danger-zone p {
+  color: #d4aeb3;
+  font-size: 0.9rem;
+}
+
+.danger-zone .form-error {
+  margin-top: 0.75rem;
+}
+
+.optional-label {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+.item-form {
+  max-width: 36rem;
+}
+
+.loading-state {
+  color: var(--text-muted);
+}
+
+@media (min-width: 54rem) {
+  .location-layout {
+    grid-template-columns: minmax(16rem, 0.75fr) minmax(22rem, 1.25fr);
+  }
+}
+
+@media (max-width: 40rem) {
+  .module-heading {
+    flex-direction: column;
+  }
+
+  .page-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .search-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .site-footer {
   border-top: 1px solid var(--border);
   color: var(--text-muted);

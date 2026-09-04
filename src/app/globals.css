@@ -32,6 +32,7 @@ body {
 
 a {
   color: inherit;
+  text-decoration: none;
 }
 
 a:focus-visible,
@@ -43,4 +44,251 @@ button:focus-visible {
 ::selection {
   background: var(--accent);
   color: var(--background);
+}
+
+.site-shell {
+  display: grid;
+  min-height: 100vh;
+  grid-template-rows: auto 1fr auto;
+}
+
+.site-header,
+.site-main,
+.site-footer {
+  width: min(100% - 2rem, 70rem);
+  margin-inline: auto;
+}
+
+.site-header {
+  display: flex;
+  min-height: 4.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-mark {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid #406157;
+  border-radius: 0.6rem;
+  background: #152720;
+  color: var(--accent-strong);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.module-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.module-nav a {
+  border-radius: 0.5rem;
+  color: var(--text-muted);
+  padding: 0.45rem 0.65rem;
+  font-size: 0.9rem;
+}
+
+.module-nav a:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.site-main {
+  padding-block: clamp(3rem, 9vw, 7rem);
+}
+
+.hero {
+  max-width: 49rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin-block: 0;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+h1 {
+  max-width: 12ch;
+  font-size: clamp(2.7rem, 11vw, 5.4rem);
+}
+
+h2 {
+  font-size: clamp(1.65rem, 5vw, 2.25rem);
+}
+
+.hero-copy {
+  max-width: 38rem;
+  margin: 1.5rem 0 0;
+  color: var(--text-muted);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+}
+
+.module-section {
+  margin-top: clamp(4rem, 10vw, 7rem);
+}
+
+.section-heading {
+  margin-bottom: 1.5rem;
+}
+
+.module-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 0.9rem;
+  list-style: none;
+}
+
+.module-card {
+  display: grid;
+  min-height: 12rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+.module-card:hover {
+  border-color: #425059;
+  background: var(--surface-strong);
+  transform: translateY(-2px);
+}
+
+.module-card a {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+}
+
+.module-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.module-card h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+}
+
+.status-label {
+  border: 1px solid #3c514a;
+  border-radius: 999px;
+  color: var(--accent-strong);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.module-description {
+  max-width: 28rem;
+  margin: 0.8rem 0 1.5rem;
+  color: var(--text-muted);
+}
+
+.module-action {
+  margin-top: auto;
+  color: var(--accent-strong);
+  font-weight: 650;
+}
+
+.placeholder {
+  max-width: 42rem;
+}
+
+.placeholder h1 {
+  max-width: none;
+}
+
+.placeholder-copy {
+  margin: 1.25rem 0 0;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.placeholder-note {
+  margin-top: 2rem;
+  border-left: 3px solid var(--accent);
+  padding: 0.15rem 0 0.15rem 1rem;
+  color: var(--text-muted);
+}
+
+.back-link {
+  display: inline-flex;
+  margin-top: 2rem;
+  border-bottom: 1px solid #446c60;
+  color: var(--accent-strong);
+  font-weight: 650;
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  padding-block: 1.5rem;
+  font-size: 0.85rem;
+}
+
+@media (min-width: 42rem) {
+  .site-header,
+  .site-main,
+  .site-footer {
+    width: min(100% - 4rem, 70rem);
+  }
+
+  .module-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .module-card a {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 28rem) {
+  .site-header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-block: 1rem;
+  }
+
+  .module-nav {
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .module-card {
+    transition: none;
+  }
 }

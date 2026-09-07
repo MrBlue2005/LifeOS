@@ -91,6 +91,12 @@ Modules may depend on Core public interfaces but must not import each other's in
 
 See [PRODUCT.md](docs/PRODUCT.md), [ARCHITECTURE.md](docs/ARCHITECTURE.md), [MVP.md](docs/MVP.md), and [ROADMAP.md](docs/ROADMAP.md) for the authoritative product and architecture constraints.
 
+## Deployment
+
+RX LifeOS is prepared for a default Next.js deployment on Vercel. Vercel and Supabase environment setup, authentication URLs, migration application, PWA installation, smoke testing, and rollback guidance are documented in [DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
 ## PWA status
 
-The application publishes RX LifeOS metadata and a web app manifest with standalone, dark-shell defaults. A service worker, offline synchronization, and final install icons are intentionally absent. Approved production icon assets are required before claiming complete installability across target browsers.
+The application publishes RX LifeOS metadata, a standalone web app manifest, 192px and 512px install icons, an Apple touch icon, and conservative mobile safe-area support. The current icon is a production-quality temporary mark that can be replaced when final branding is approved.
+
+RX LifeOS does not provide offline behavior, background synchronization, or a service worker. Installing it creates an app-like launcher for the HTTPS-hosted product; authenticated data continues to load from Supabase over the network.

@@ -128,7 +128,7 @@ Database changes are independent of a Vercel rollback. Never assume rolling back
 ## Known limitations
 
 - Deployment has not yet been performed or smoke-tested on a real production domain.
-- The install icon is intentionally temporary pending final RX LifeOS branding.
+- The install icon uses the approved midnight and violet RX LifeOS identity.
 - There is no offline cache, background sync, push notification support, or custom install prompt.
 - Preview sign-up confirmation returns to the Supabase project's Site URL rather than a changing preview domain.
 - A dedicated production Supabase project must still be created manually if environment separation is required.

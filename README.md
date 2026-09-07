@@ -97,6 +97,6 @@ RX LifeOS is prepared for a default Next.js deployment on Vercel. Vercel and Sup
 
 ## PWA status
 
-The application publishes RX LifeOS metadata, a standalone web app manifest, 192px and 512px install icons, an Apple touch icon, and conservative mobile safe-area support. The current icon is a production-quality temporary mark that can be replaced when final branding is approved.
+The application publishes RX LifeOS metadata, a standalone web app manifest, 192px and 512px install icons, an Apple touch icon, and conservative mobile safe-area support. The install icon uses the approved midnight and violet RX monogram identity.
 
 RX LifeOS does not provide offline behavior, background synchronization, or a service worker. Installing it creates an app-like launcher for the HTTPS-hosted product; authenticated data continues to load from Supabase over the network.

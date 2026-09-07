@@ -22,8 +22,8 @@ describe("RX LifeOS manifest", () => {
       start_url: "/",
       scope: "/",
       display: "standalone",
-      background_color: "#0c1013",
-      theme_color: "#0c1013",
+      background_color: "#07061a",
+      theme_color: "#07061a",
       icons: expect.arrayContaining([
         expect.objectContaining({ src: "/icon-192x192.png", sizes: "192x192" }),
         expect.objectContaining({ src: "/icon-512x512.png", sizes: "512x512" }),

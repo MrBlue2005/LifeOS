@@ -37,7 +37,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   colorScheme: "dark",
-  themeColor: "#0c1013",
+  themeColor: "#07061a",
 };
 
 type RootLayoutProps = Readonly<{

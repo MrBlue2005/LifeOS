@@ -3,6 +3,12 @@ import { notFound } from "next/navigation";
 
 import { ConfigurationRequired } from "@/core/components/configuration-required";
 import { DeleteItemForm } from "./components/delete-item-form";
+import {
+  ChevronIcon,
+  LocationIcon,
+  PlusIcon,
+  SearchIcon,
+} from "./components/icons";
 import { ItemForm } from "./components/item-form";
 import { LocationManager } from "./components/location-manager";
 import {
@@ -55,88 +61,161 @@ export async function FindItHomeScreen({
   }));
 
   return (
-    <div className="find-it-page">
-      <header className="module-heading">
-        <div>
-          <p className="eyebrow">Find It</p>
-          <h1>Know where everything is.</h1>
+    <div className="find-it-page find-it-home">
+      <header className="find-it-home-intro">
+        <div className="module-identity">
+          <span className="module-identity-mark" aria-hidden="true">
+            <LocationIcon />
+          </span>
+          <p>
+            RX LifeOS <span aria-hidden="true">/</span> <strong>Find It</strong>
+          </p>
         </div>
-        <nav className="page-actions" aria-label="Find It actions">
-          <Link className="secondary-link" href="/find-it/locations">
-            Manage locations
-          </Link>
-          {locations.length ? (
-            <Link className="primary-link" href="/find-it/items/new">
-              Add item
-            </Link>
-          ) : null}
-        </nav>
+        <h1>What are you trying to find?</h1>
+        <p className="find-it-home-copy">
+          Search the things you&apos;ve saved and see exactly where they are.
+        </p>
       </header>
 
       <Notice value={notice} />
 
-      <form className="search-form" role="search">
-        <label htmlFor="find-it-search">Search your items</label>
-        <div className="search-row">
-          <input
-            className="search-input"
-            defaultValue={query}
-            id="find-it-search"
-            maxLength={100}
-            name="q"
-            placeholder="Passport, registration certificate…"
-            type="search"
-          />
-          <button className="primary-button" type="submit">
-            Search
-          </button>
-        </div>
-      </form>
+      <section
+        className="find-it-search-area"
+        aria-labelledby="find-it-search-label"
+      >
+        <form className="find-it-search-form" role="search">
+          <label
+            className="visually-hidden"
+            id="find-it-search-label"
+            htmlFor="find-it-search"
+          >
+            Search your saved items
+          </label>
+          <div className="search-row">
+            <SearchIcon className="find-it-search-icon" />
+            <input
+              className="find-it-search-input"
+              defaultValue={query}
+              id="find-it-search"
+              maxLength={100}
+              name="q"
+              placeholder="Passport, HDMI cable, car documents…"
+              type="search"
+            />
+            {query ? (
+              <Link className="search-clear" href="/find-it">
+                Clear
+              </Link>
+            ) : null}
+            <button className="search-submit" type="submit">
+              Search
+            </button>
+          </div>
+        </form>
+
+        <nav className="find-it-quick-actions" aria-label="Find It actions">
+          {locations.length ? (
+            <Link
+              className="quick-action quick-action-primary"
+              href="/find-it/items/new"
+            >
+              <span className="quick-action-icon" aria-hidden="true">
+                <PlusIcon />
+              </span>
+              <span>
+                <strong>Add item</strong>
+                <small>Save where something lives</small>
+              </span>
+            </Link>
+          ) : null}
+          <Link className="quick-action" href="/find-it/locations">
+            <span className="quick-action-icon" aria-hidden="true">
+              <LocationIcon />
+            </span>
+            <span>
+              <strong>Manage locations</strong>
+              <small>Organize rooms and storage</small>
+            </span>
+          </Link>
+        </nav>
+      </section>
 
       {!locations.length ? (
-        <section className="empty-state prominent-empty" aria-labelledby="start-title">
-          <h2 id="start-title">Start with a location</h2>
-          <p>
-            Create a place such as Home, then add rooms, furniture, or containers
-            in whatever structure makes sense to you.
-          </p>
+        <section className="find-it-empty" aria-labelledby="start-title">
+          <span className="empty-state-mark" aria-hidden="true">
+            <LocationIcon />
+          </span>
+          <div>
+            <p className="section-kicker">Your first place</p>
+            <h2 id="start-title">
+              Save where you put things. Find them instantly later.
+            </h2>
+            <p>Start with Home, a room, or any place that makes sense to you.</p>
+          </div>
           <Link className="primary-link" href="/find-it/locations">
             Create your first location
           </Link>
         </section>
       ) : (
-        <section className="results-section" aria-labelledby="results-title">
-          <div className="section-heading horizontal-heading">
-            <h2 id="results-title">{query ? "Search results" : "Your items"}</h2>
-            <span>{results.length} found</span>
+        <section className="find-it-results" aria-labelledby="results-title">
+          <div className="find-it-results-heading">
+            <div>
+              <p className="section-kicker">
+                {query ? "Matching items" : "Saved items"}
+              </p>
+              <h2 id="results-title">
+                {query ? `Results for “${query}”` : "Everything has a place"}
+              </h2>
+            </div>
+            <span>
+              {results.length} {results.length === 1 ? "item" : "items"}
+            </span>
           </div>
           {results.length ? (
-            <ul className="item-results">
+            <ul className="find-it-result-list">
               {results.map(({ item, locationPath }) => (
                 <li key={item.id}>
                   <Link href={`/find-it/items/${item.id}`}>
-                    <strong>{item.name}</strong>
-                    {item.description ? <span>{item.description}</span> : null}
-                    <span className="result-path">
-                      {formatLocationPath(locationPath)}
+                    <span className="result-item-mark" aria-hidden="true">
+                      <span />
                     </span>
+                    <span className="result-item-copy">
+                      <strong>{item.name}</strong>
+                      {item.description ? <span>{item.description}</span> : null}
+                      <span className="result-path">
+                        <LocationIcon />
+                        {formatLocationPath(locationPath)}
+                      </span>
+                    </span>
+                    <ChevronIcon className="result-chevron" />
                   </Link>
                 </li>
               ))}
             </ul>
           ) : (
-            <div className="empty-state">
-              <h3>{query ? "No matching items" : "No items yet"}</h3>
-              <p>
-                {query
-                  ? "Try a shorter part of the item name."
-                  : "Add an item and choose where it lives."}
-              </p>
-              {!query ? (
+            <div className="find-it-empty compact-empty">
+              <span className="empty-state-mark" aria-hidden="true">
+                <SearchIcon />
+              </span>
+              <div>
+                <h3>
+                  {query ? "Nothing matched that search" : "No items saved yet"}
+                </h3>
+                <p>
+                  {query
+                    ? "Try part of the item name, or clear the search to see everything."
+                    : "Add your first item and choose where it lives."}
+                </p>
+              </div>
+              {query ? (
+                <Link className="secondary-link" href="/find-it">
+                  Clear search
+                </Link>
+              ) : (
                 <Link className="primary-link" href="/find-it/items/new">
                   Add your first item
                 </Link>
-              ) : null}
+              )}
             </div>
           )}
         </section>

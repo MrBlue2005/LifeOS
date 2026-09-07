@@ -16,25 +16,30 @@ export function DeleteItemForm({
   );
 
   return (
-    <div className="danger-zone">
-      <h2>Remove item</h2>
-      <p>This permanently removes the item from Find It.</p>
-      <form
-        action={action}
-        onSubmit={(event) => {
-          if (!window.confirm(`Delete “${itemName}”?`)) {
-            event.preventDefault();
-          }
-        }}
-      >
-        <input type="hidden" name="itemId" value={itemId} />
-        <SubmitButton
-          label="Delete item"
-          pendingLabel="Deleting…"
-          tone="danger"
-        />
-      </form>
-      <FormFeedback state={state} />
-    </div>
+    <section className="danger-zone item-delete-zone" aria-labelledby="delete-item-title">
+      <div>
+        <p className="section-kicker">Permanent action</p>
+        <h2 id="delete-item-title">Delete this item</h2>
+        <p>This removes it from Find It. This action cannot be undone.</p>
+      </div>
+      <div className="item-delete-action">
+        <form
+          action={action}
+          onSubmit={(event) => {
+            if (!window.confirm(`Delete “${itemName}”?`)) {
+              event.preventDefault();
+            }
+          }}
+        >
+          <input type="hidden" name="itemId" value={itemId} />
+          <SubmitButton
+            label="Delete item"
+            pendingLabel="Deleting…"
+            tone="danger"
+          />
+        </form>
+        <FormFeedback state={state} />
+      </div>
+    </section>
   );
 }

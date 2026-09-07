@@ -5,6 +5,7 @@ import { ConfigurationRequired } from "@/core/components/configuration-required"
 import { DeleteItemForm } from "./components/delete-item-form";
 import {
   ChevronIcon,
+  ItemIcon,
   LocationIcon,
   PlusIcon,
   SearchIcon,
@@ -274,26 +275,41 @@ export async function NewItemScreen({ userId }: Readonly<{ userId: string }>) {
   const entries = buildLocationTree(locations);
 
   return (
-    <div className="find-it-page narrow-page">
-      <header className="module-heading">
+    <div className="find-it-page narrow-page item-page">
+      <header className="module-heading item-page-heading">
         <div>
-          <p className="eyebrow">Find It</p>
+          <div className="module-identity">
+            <span className="module-identity-mark" aria-hidden="true">
+              <LocationIcon />
+            </span>
+            <p>
+              RX LifeOS <span aria-hidden="true">/</span> <strong>Find It</strong>
+            </p>
+          </div>
           <h1>Add an item</h1>
+          <p className="heading-copy">Remember what it is and where it lives.</p>
         </div>
         <Link className="secondary-link" href="/find-it">
           Cancel
         </Link>
       </header>
       {locations.length ? (
-        <ItemForm locationEntries={entries} />
+        <section className="item-editor-card" aria-labelledby="add-item-title">
+          <h2 className="visually-hidden" id="add-item-title">Item details</h2>
+          <ItemForm locationEntries={entries} />
+        </section>
       ) : (
-        <div className="empty-state">
-          <h2>Create a location first</h2>
-          <p>Every Find It item needs a current location.</p>
+        <section className="item-no-locations" aria-labelledby="no-locations-title">
+          <span className="empty-state-mark" aria-hidden="true"><LocationIcon /></span>
+          <div>
+            <p className="section-kicker">One quick setup</p>
+            <h2 id="no-locations-title">You need a place before you can save an item.</h2>
+            <p>Create the room, drawer, shelf, or any place where this item lives.</p>
+          </div>
           <Link className="primary-link" href="/find-it/locations">
-            Manage locations
+            Create a location
           </Link>
-        </div>
+        </section>
       )}
     </div>
   );
@@ -321,20 +337,30 @@ export async function ItemDetailScreen({
   const path = getLocationPath(item.locationId, locations);
 
   return (
-    <div className="find-it-page narrow-page">
-      <header className="module-heading">
+    <div className="find-it-page narrow-page item-page">
+      <header className="module-heading item-page-heading">
         <div>
-          <p className="eyebrow">Find It item</p>
+          <div className="module-identity">
+            <span className="module-identity-mark" aria-hidden="true">
+              <ItemIcon />
+            </span>
+            <p>
+              Find It <span aria-hidden="true">/</span> <strong>Saved item</strong>
+            </p>
+          </div>
           <h1>{item.name}</h1>
-          <p className="current-location">{formatLocationPath(path)}</p>
+          <p className="current-location">
+            <LocationIcon />
+            <span>{formatLocationPath(path)}</span>
+          </p>
         </div>
         <Link className="secondary-link" href="/find-it">
           Back to search
         </Link>
       </header>
       <Notice value={notice} />
-      <section className="panel" aria-labelledby="edit-item-title">
-        <h2 id="edit-item-title">Edit or move item</h2>
+      <section className="item-editor-card" aria-labelledby="edit-item-title">
+        <h2 className="visually-hidden" id="edit-item-title">Edit or move this item</h2>
         <ItemForm item={item} locationEntries={entries} />
       </section>
       <DeleteItemForm itemId={item.id} itemName={item.name} />

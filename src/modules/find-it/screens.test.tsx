@@ -4,17 +4,22 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { FindItItem, FindItLocation } from "./types";
 
 const queryMocks = vi.hoisted(() => ({
+  getItemById: vi.fn(),
   listItems: vi.fn(),
   listLocations: vi.fn(),
 }));
 
 vi.mock("./data/queries", () => ({
-  getItemById: vi.fn(),
+  getItemById: queryMocks.getItemById,
   listItems: queryMocks.listItems,
   listLocations: queryMocks.listLocations,
 }));
 
-import { FindItHomeScreen } from "./screens";
+import {
+  FindItHomeScreen,
+  ItemDetailScreen,
+  NewItemScreen,
+} from "./screens";
 
 const location: FindItLocation = {
   id: "10000000-0000-4000-8000-000000000001",
@@ -37,6 +42,7 @@ const item: FindItItem = {
 
 describe("FindItHomeScreen", () => {
   beforeEach(() => {
+    queryMocks.getItemById.mockReset();
     queryMocks.listItems.mockReset();
     queryMocks.listLocations.mockReset();
   });
@@ -83,5 +89,52 @@ describe("FindItHomeScreen", () => {
     expect(queryMocks.listItems).toHaveBeenCalledWith(location.userId, "passport");
     expect(html).toContain("Results for “passport”");
     expect(html).toContain("Clear search");
+  });
+});
+
+describe("item screens", () => {
+  beforeEach(() => {
+    queryMocks.getItemById.mockReset();
+    queryMocks.listItems.mockReset();
+    queryMocks.listLocations.mockReset();
+  });
+
+  it("guides users to create a location before adding an item", async () => {
+    queryMocks.listLocations.mockResolvedValue([]);
+
+    const html = renderToStaticMarkup(
+      await NewItemScreen({ userId: location.userId }),
+    );
+
+    expect(html).toContain("You need a place before you can save an item.");
+    expect(html).toContain("href=\"/find-it/locations\"");
+    expect(html).not.toContain("data-location-picker");
+  });
+
+  it("uses the focused add-item form when locations exist", async () => {
+    queryMocks.listLocations.mockResolvedValue([location]);
+
+    const html = renderToStaticMarkup(
+      await NewItemScreen({ userId: location.userId }),
+    );
+
+    expect(html).toContain("Item details");
+    expect(html).toContain("Current location");
+    expect(html).toContain("Choose a location");
+    expect(html).not.toContain("Delete this item");
+  });
+
+  it("uses move language and keeps deletion separate when editing", async () => {
+    queryMocks.getItemById.mockResolvedValue(item);
+    queryMocks.listLocations.mockResolvedValue([location]);
+
+    const html = renderToStaticMarkup(
+      await ItemDetailScreen({ itemId: item.id, userId: item.userId }),
+    );
+
+    expect(html).toContain("Edit or move this item");
+    expect(html).toContain("Move item to");
+    expect(html).toContain("Top Drawer");
+    expect(html).toContain("Delete this item");
   });
 });

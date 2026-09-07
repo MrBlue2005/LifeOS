@@ -68,3 +68,36 @@ export function MoreIcon({ className }: IconProps) {
     </IconFrame>
   );
 }
+
+export function ItemIcon({ className }: IconProps) {
+  return (
+    <IconFrame className={className}>
+      <path
+        d="m4.5 7.5 7.5-4 7.5 4v9L12 20.5l-7.5-4v-9Z"
+        stroke="currentColor"
+        strokeLinejoin="round"
+        strokeWidth="1.7"
+      />
+      <path
+        d="m4.8 7.7 7.2 4 7.2-4M12 11.7v8.4"
+        stroke="currentColor"
+        strokeLinejoin="round"
+        strokeWidth="1.7"
+      />
+    </IconFrame>
+  );
+}
+
+export function CheckIcon({ className }: IconProps) {
+  return (
+    <IconFrame className={className}>
+      <path
+        d="m5 12.5 4.2 4L19 6.8"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+    </IconFrame>
+  );
+}

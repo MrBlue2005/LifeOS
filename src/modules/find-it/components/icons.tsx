@@ -58,3 +58,13 @@ export function ChevronIcon({ className }: IconProps) {
     </IconFrame>
   );
 }
+
+export function MoreIcon({ className }: IconProps) {
+  return (
+    <IconFrame className={className}>
+      <circle cx="5" cy="12" fill="currentColor" r="1.35" />
+      <circle cx="12" cy="12" fill="currentColor" r="1.35" />
+      <circle cx="19" cy="12" fill="currentColor" r="1.35" />
+    </IconFrame>
+  );
+}

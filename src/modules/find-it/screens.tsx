@@ -239,17 +239,24 @@ export async function LocationsScreen({
   }, {});
 
   return (
-    <div className="find-it-page">
-      <header className="module-heading">
+    <div className="find-it-page locations-page">
+      <header className="module-heading locations-heading">
         <div>
-          <p className="eyebrow">Find It</p>
+          <div className="module-identity">
+            <span className="module-identity-mark" aria-hidden="true">
+              <LocationIcon />
+            </span>
+            <p>
+              RX LifeOS <span aria-hidden="true">/</span> <strong>Find It</strong>
+            </p>
+          </div>
           <h1>Locations</h1>
           <p className="heading-copy">
-            Build a hierarchy that matches the way your spaces actually work.
+            Organize the places where your things live.
           </p>
         </div>
         <Link className="secondary-link" href="/find-it">
-          Back to Find It
+          Back to search
         </Link>
       </header>
       <Notice value={notice} />

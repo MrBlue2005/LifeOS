@@ -18,6 +18,7 @@ vi.mock("./data/queries", () => ({
 import {
   FindItHomeScreen,
   ItemDetailScreen,
+  LocationsScreen,
   NewItemScreen,
 } from "./screens";
 
@@ -136,5 +137,36 @@ describe("item screens", () => {
     expect(html).toContain("Move item to");
     expect(html).toContain("Top Drawer");
     expect(html).toContain("Delete this item");
+  });
+});
+
+describe("LocationsScreen", () => {
+  beforeEach(() => {
+    queryMocks.listItems.mockReset();
+    queryMocks.listLocations.mockReset();
+    queryMocks.listItems.mockResolvedValue([]);
+  });
+
+  it("keeps first location creation visible during setup", async () => {
+    queryMocks.listLocations.mockResolvedValue([]);
+
+    const html = renderToStaticMarkup(
+      await LocationsScreen({ userId: location.userId }),
+    );
+
+    expect(html).toContain('class="new-root-card" open=""');
+    expect(html).toContain("Create the places where you keep things.");
+  });
+
+  it("uses a compact location disclosure and consistent return label after setup", async () => {
+    queryMocks.listLocations.mockResolvedValue([location]);
+
+    const html = renderToStaticMarkup(
+      await LocationsScreen({ userId: location.userId }),
+    );
+
+    expect(html).toContain("Back to Find It");
+    expect(html).toContain('class="new-root-card"');
+    expect(html).not.toContain('class="new-root-card" open=""');
   });
 });

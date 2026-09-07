@@ -14,12 +14,14 @@ export async function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="site-shell">
-      <header className="site-header">
+      <header
+        className={`site-header ${user ? "site-header-authenticated" : "site-header-guest"}`}
+      >
         <Link className="brand-link" href="/" aria-label="RX LifeOS home">
           <span className="brand-mark" aria-hidden="true">
             RX
           </span>
-          <span>RX LifeOS</span>
+          <span className="brand-name">RX LifeOS</span>
         </Link>
 
         <div className="header-actions">
@@ -32,7 +34,7 @@ export async function AppShell({ children }: AppShellProps) {
           </nav>
 
           {user ? (
-            <form action={signOutAction}>
+            <form className="account-action" action={signOutAction}>
               <button className="quiet-button" type="submit">
                 Sign out
               </button>
@@ -52,7 +54,10 @@ export async function AppShell({ children }: AppShellProps) {
 
       <main className="site-main">{children}</main>
 
-      <footer className="site-footer">RX LifeOS · Built for everyday clarity.</footer>
+      <footer className="site-footer">
+        <strong>RX LifeOS</strong>
+        <span>Built for everyday clarity.</span>
+      </footer>
     </div>
   );
 }

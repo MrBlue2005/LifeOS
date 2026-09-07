@@ -283,13 +283,16 @@ export function LocationManager({
 
   return (
     <div className="location-layout">
-      <section className="new-root-card" aria-labelledby="new-location-title">
-        <span className="new-root-icon" aria-hidden="true"><PlusIcon /></span>
-        <div>
-          <p className="section-kicker">New main place</p>
-          <h2 id="new-location-title">Add a top-level location</h2>
-          <p>Start another place such as Home, Office, or Storage Unit.</p>
-        </div>
+      <details className="new-root-card" open={locations.length ? undefined : true}>
+        <summary>
+          <span className="new-root-icon" aria-hidden="true"><PlusIcon /></span>
+          <span className="new-root-summary-copy">
+            <span className="section-kicker">New main place</span>
+            <strong>Add a top-level location</strong>
+            <span>Home, Office, or another main place</span>
+          </span>
+          <span className="new-root-toggle" aria-hidden="true">Add</span>
+        </summary>
         <form className="form-stack new-root-form" action={createAction}>
           <input type="hidden" name="parentId" value="" />
           <label className="field">
@@ -305,7 +308,7 @@ export function LocationManager({
           <FormFeedback state={createState} />
           <SubmitButton label="Add top-level location" pendingLabel="Adding…" />
         </form>
-      </section>
+      </details>
 
       <section className="location-browser" aria-labelledby="your-locations-title">
         <div className="location-browser-heading">

@@ -5,6 +5,7 @@ import { ConfigurationRequired } from "@/core/components/configuration-required"
 import { DeleteItemForm } from "./components/delete-item-form";
 import {
   ChevronIcon,
+  CheckIcon,
   ItemIcon,
   LocationIcon,
   PlusIcon,
@@ -36,9 +37,10 @@ function Notice({ value }: Readonly<{ value?: string }>) {
   const message = value ? messages[value] : undefined;
 
   return message ? (
-    <p className="notice" role="status">
-      {message}
-    </p>
+    <div className="notice" role="status">
+      <CheckIcon />
+      <span>{message}</span>
+    </div>
   ) : null;
 }
 
@@ -68,9 +70,7 @@ export async function FindItHomeScreen({
           <span className="module-identity-mark" aria-hidden="true">
             <LocationIcon />
           </span>
-          <p>
-            RX LifeOS <span aria-hidden="true">/</span> <strong>Find It</strong>
-          </p>
+          <p><strong>Find It</strong></p>
         </div>
         <h1>What are you trying to find?</h1>
         <p className="find-it-home-copy">
@@ -162,10 +162,10 @@ export async function FindItHomeScreen({
           <div className="find-it-results-heading">
             <div>
               <p className="section-kicker">
-                {query ? "Matching items" : "Saved items"}
+                {query ? "Matching items" : "Inventory"}
               </p>
               <h2 id="results-title">
-                {query ? `Results for “${query}”` : "Everything has a place"}
+                {query ? `Results for “${query}”` : "Your saved items"}
               </h2>
             </div>
             <span>
@@ -247,9 +247,7 @@ export async function LocationsScreen({
             <span className="module-identity-mark" aria-hidden="true">
               <LocationIcon />
             </span>
-            <p>
-              RX LifeOS <span aria-hidden="true">/</span> <strong>Find It</strong>
-            </p>
+            <p><strong>Find It</strong></p>
           </div>
           <h1>Locations</h1>
           <p className="heading-copy">
@@ -257,7 +255,7 @@ export async function LocationsScreen({
           </p>
         </div>
         <Link className="secondary-link" href="/find-it">
-          Back to search
+          Back to Find It
         </Link>
       </header>
       <Notice value={notice} />
@@ -282,9 +280,7 @@ export async function NewItemScreen({ userId }: Readonly<{ userId: string }>) {
             <span className="module-identity-mark" aria-hidden="true">
               <LocationIcon />
             </span>
-            <p>
-              RX LifeOS <span aria-hidden="true">/</span> <strong>Find It</strong>
-            </p>
+            <p><strong>Find It</strong></p>
           </div>
           <h1>Add an item</h1>
           <p className="heading-copy">Remember what it is and where it lives.</p>
@@ -344,9 +340,7 @@ export async function ItemDetailScreen({
             <span className="module-identity-mark" aria-hidden="true">
               <ItemIcon />
             </span>
-            <p>
-              Find It <span aria-hidden="true">/</span> <strong>Saved item</strong>
-            </p>
+            <p><strong>Find It</strong></p>
           </div>
           <h1>{item.name}</h1>
           <p className="current-location">
@@ -355,7 +349,7 @@ export async function ItemDetailScreen({
           </p>
         </div>
         <Link className="secondary-link" href="/find-it">
-          Back to search
+          Back to Find It
         </Link>
       </header>
       <Notice value={notice} />

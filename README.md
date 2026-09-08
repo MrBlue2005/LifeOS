@@ -60,7 +60,7 @@ For local intake testing, an authenticated user can open a URL such as:
 /buy-later/import?url=https%3A%2F%2Fexample.com%2Fproduct
 ```
 
-The route only prefills the existing Buy Later form; it does not fetch the product page or save without confirmation.
+The route prefills the existing Buy Later form and, when no title was supplied, may make one best-effort server-side request for page title metadata. The fetched title is always editable. The intake does not extract prices or other product data and never saves without explicit confirmation.
 
 ## Validation
 

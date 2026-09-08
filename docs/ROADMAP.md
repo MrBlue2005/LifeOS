@@ -76,7 +76,7 @@ Target users repeatedly save items into arbitrary nested locations and later ret
 
 ## Phase 2 — Buy Later MVP
 
-**Status:** Implemented and operationally validated against the linked remote Supabase development project, with synchronized migration history. Manual save/edit/delete, optional URL and price/currency, Waiting and Due views, explicit rescheduling, purchased/dismissed outcomes, history, real-iPhone LAN reconsideration controls, and cross-user RLS isolation passed live validation. The local-oriented Buy Later pgTAP suite has not yet been executed. No automatic fetching, notifications, scraping, or AI were introduced.
+**Status:** Implemented and operationally validated against the linked remote Supabase development project, with synchronized migration history. Manual save/edit/delete, optional URL and price/currency, Waiting and Due views, explicit rescheduling, purchased/dismissed outcomes, history, real-iPhone LAN reconsideration controls, and cross-user RLS isolation passed live validation. The authenticated intake route now has optional title-only, best-effort server enrichment with manual fallback and explicit-save semantics. The local-oriented Buy Later pgTAP suite has not yet been executed. No recurring fetching, price extraction, broad scraping, notifications, or AI were introduced.
 
 ### Objective
 

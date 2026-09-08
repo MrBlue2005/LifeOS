@@ -91,6 +91,8 @@ Photo recognition is not required to prove the Find It MVP. It may enter only af
 
 **Implementation and validation status:** The Phase 2 MVP migration is applied to the linked remote Supabase development project, and local and remote migration histories are synchronized. Manual purchase-intention entry, optional URL/price/currency/note, Waiting and Due states, explicit rescheduling, purchased/dismissed outcomes, history, separate permanent deletion, and cross-user RLS isolation passed live validation. Reconsideration presets and custom dates also passed real-iPhone LAN validation. The local-oriented Buy Later pgTAP suite has not yet been executed.
 
+The authenticated intake route also offers title-only, best-effort metadata assistance for a validated product URL when no title was supplied. It never extracts price or other product data, never calls AI, and never persists before the user reviews and submits the existing form. Unsupported or blocked pages fall back to manual entry.
+
 ### Core success story
 
 **“I saved something I may want to buy, RX LifeOS remembers it, and helps me decide later.”**
@@ -115,7 +117,7 @@ Photo recognition is not required to prove the Find It MVP. It may enter only af
 - Optional product image/reference after its privacy, storage, and deletion behavior is defined.
 - Simple calculated insights such as days waited and the total entered value of items archived after “No.”
 - Manual price observations and deterministic comparison with the saved/target price.
-- Lightweight metadata assistance from a pasted page when it is reliable, user-reviewable, and does not require universal server-side scraping.
+- Further metadata assistance beyond the implemented title-only intake, but only when reliable, user-reviewable, and not dependent on universal server-side scraping.
 - Filtering/sorting by status, date, priority, or category if the list becomes hard to use.
 
 ### LATER

@@ -21,7 +21,28 @@ describe("Buy Later intake enrichment", () => {
     expect(enriched.returnPath).toBe(intake.returnPath);
   });
 
-  it("leaves the editable intake usable when enrichment fails", async () => {
+  it("uses the local URL slug only after metadata has no title", async () => {
+    const intake = parseBuyLaterIntake({ url: "https://shop.example/portable-reading-lamp" });
+    await expect(enrichBuyLaterIntake(intake, async () => ({ title: "Fetched title" }))).resolves.toMatchObject({
+      initialValues: { name: "Fetched title" },
+    });
+    await expect(enrichBuyLaterIntake(intake, async () => null)).resolves.toMatchObject({
+      initialValues: { name: "Portable reading lamp" },
+    });
+  });
+
+  it("uses the eMAG-style URL path after a metadata failure", async () => {
+    const intake = parseBuyLaterIntake({
+      url: "https://www.emag.ro/set-de-constructie-bedeer-nava-de-lupta-missouri-2228pcs-82-5-x-24-5-x-10-1-cm-cu-o-baza-frumoasa-perfecta-pentru-a-fi-oferita-cadou-pasionatilor-si-entuziastilor-militari-cu-varsta-de-14-ani-si-peste/pd/DT5BMW3BM/",
+    });
+    await expect(enrichBuyLaterIntake(intake, async () => Promise.reject(new Error("blocked")))).resolves.toMatchObject({
+      initialValues: {
+        name: "Set de constructie bedeer nava de lupta missouri 2228pcs 82 5 x 24 5 x 10 1 cm cu o baza frumoasa perfecta pentru a fi oferita cadou pasionatilor si",
+      },
+    });
+  });
+
+  it("leaves the editable intake empty when metadata fails and no slug is plausible", async () => {
     const intake = parseBuyLaterIntake({ url: "https://example.com/product" });
     await expect(enrichBuyLaterIntake(intake, async () => null)).resolves.toBe(intake);
     await expect(enrichBuyLaterIntake(intake, async () => Promise.reject(new Error("timeout")))).resolves.toBe(intake);

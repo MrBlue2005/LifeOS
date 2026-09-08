@@ -60,7 +60,7 @@ For local intake testing, an authenticated user can open a URL such as:
 /buy-later/import?url=https%3A%2F%2Fexample.com%2Fproduct
 ```
 
-The route prefills the existing Buy Later form and, when no title was supplied, may make one best-effort server-side request for page title metadata. The fetched title is always editable. The intake does not extract prices or other product data and never saves without explicit confirmation.
+The route resolves an editable item name in this order: an explicit shared title, best-effort server-side page title metadata, then conservative local parsing of a descriptive URL pathname. URL-slug fallback makes no additional network request. The intake does not extract prices or other product data and never saves without explicit confirmation.
 
 ## Validation
 

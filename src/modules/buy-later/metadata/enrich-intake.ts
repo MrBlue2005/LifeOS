@@ -1,4 +1,5 @@
 import type { BuyLaterIntake } from "../domain/intake";
+import { deriveTitleFromUrlPath } from "./derive-title-from-url-path";
 import { fetchProductMetadata, type ProductMetadata } from "./fetch-product-metadata";
 
 type MetadataFetcher = (url: string) => Promise<ProductMetadata | null>;
@@ -9,14 +10,18 @@ export async function enrichBuyLaterIntake(
 ): Promise<BuyLaterIntake> {
   if (intake.initialValues.name || !intake.initialValues.productUrl) return intake;
 
+  let title: string | null = null;
   try {
-    const metadata = await fetchMetadata(intake.initialValues.productUrl);
-    if (!metadata?.title) return intake;
-    return {
-      ...intake,
-      initialValues: { ...intake.initialValues, name: metadata.title },
-    };
+    title = (await fetchMetadata(intake.initialValues.productUrl))?.title ?? null;
   } catch {
-    return intake;
+    // Metadata failure intentionally falls back to local URL-path parsing.
   }
+
+  title ??= deriveTitleFromUrlPath(intake.initialValues.productUrl) ?? null;
+  if (!title) return intake;
+
+  return {
+    ...intake,
+    initialValues: { ...intake.initialValues, name: title },
+  };
 }

@@ -440,6 +440,7 @@ h2 {
 }
 
 .primary-button,
+.secondary-button,
 .danger-button {
   min-height: 2.8rem;
   border: 1px solid transparent;
@@ -468,6 +469,7 @@ h2 {
 }
 
 .primary-button:disabled,
+.secondary-button:disabled,
 .danger-button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
@@ -477,6 +479,17 @@ h2 {
   border-color: var(--color-danger-border);
   background: var(--color-danger-surface);
   color: var(--color-danger);
+}
+
+.secondary-button {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-recessed);
+  color: var(--color-text);
+}
+
+.secondary-button:hover {
+  border-color: var(--color-primary-border-strong);
+  background: var(--color-primary-muted);
 }
 
 .form-error,
@@ -1923,6 +1936,468 @@ h2 {
   font-size: clamp(2.2rem, 8vw, 4rem);
 }
 
+.buy-later-page {
+  display: grid;
+  width: 100%;
+  max-width: 64rem;
+  gap: clamp(1.75rem, 4vw, 3rem);
+}
+
+.buy-later-narrow {
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+.buy-later-hero {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.buy-later-heading-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.buy-later-heading-row h1 {
+  max-width: 16ch;
+  font-size: clamp(2.55rem, 8vw, 4.8rem);
+}
+
+.buy-later-home.has-items .buy-later-hero {
+  gap: 0.9rem;
+}
+
+.buy-later-home.has-items .buy-later-heading-row h1 {
+  max-width: 18ch;
+  font-size: clamp(2.25rem, 6vw, 3.65rem);
+}
+
+.buy-later-heading-row p,
+.decision-copy,
+.resolved-panel > p:last-child {
+  margin: 1rem 0 0;
+  color: var(--color-text-muted);
+}
+
+.buy-later-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.due-section .buy-later-section-heading h2 {
+  color: var(--color-accent-soft);
+}
+
+.buy-later-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.buy-later-section-heading > span {
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+}
+
+.buy-later-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 0.7rem;
+  list-style: none;
+}
+
+.buy-later-item {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+}
+
+.buy-later-item-due {
+  border-color: var(--color-primary-border-strong);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent 48%),
+    var(--color-surface);
+}
+
+.buy-later-item > a {
+  display: grid;
+  min-height: 6.4rem;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem;
+}
+
+.buy-later-item-icon,
+.buy-later-empty > svg {
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border-radius: 0.85rem;
+  background: var(--color-primary-muted);
+  color: var(--color-primary);
+  padding: 0.65rem;
+}
+
+.buy-later-item-copy {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.buy-later-item-copy > strong {
+  overflow-wrap: anywhere;
+  font-size: 1.05rem;
+}
+
+.buy-later-item-copy > span:not(.buy-later-card-timing),
+.buy-later-item-copy > small {
+  overflow-wrap: anywhere;
+  color: var(--color-text-muted);
+}
+
+.buy-later-card-timing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.65rem;
+  color: var(--color-text-tertiary);
+  font-size: 0.78rem;
+}
+
+.buy-later-card-supporting {
+  font-size: 0.9rem;
+}
+
+.buy-later-item-copy > small {
+  margin-top: 0.05rem;
+  color: var(--color-text-tertiary);
+  font-size: 0.72rem;
+}
+
+.status-pill {
+  border: 1px solid var(--color-primary-border);
+  border-radius: 999px;
+  color: var(--color-accent-soft);
+  padding: 0.16rem 0.45rem;
+}
+
+.status-purchased {
+  border-color: var(--color-success-border);
+  color: var(--color-success);
+}
+
+.status-dismissed {
+  border-color: var(--color-border-strong);
+  color: var(--color-text-muted);
+}
+
+.buy-later-arrow {
+  width: 1rem;
+  color: var(--color-text-tertiary);
+}
+
+.buy-later-empty {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: 1rem;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.buy-later-empty p {
+  margin: 0.25rem 0 0;
+  color: var(--color-text-muted);
+}
+
+.buy-later-calm-status {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: -0.25rem 0;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+.buy-later-calm-status svg {
+  width: 1.05rem;
+  flex: 0 0 auto;
+  color: var(--color-primary);
+}
+
+.buy-later-calm-status strong {
+  color: var(--color-text-soft);
+}
+
+.buy-later-home-history {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.buy-later-history {
+  max-width: 52rem;
+}
+
+.buy-later-history .buy-later-item {
+  background: color-mix(in srgb, var(--color-surface) 62%, transparent);
+}
+
+.buy-later-editor-heading h1 {
+  max-width: 17ch;
+}
+
+.buy-later-editor-card,
+.decision-panel,
+.waiting-panel,
+.resolved-panel {
+  border: 1px solid var(--color-border);
+  border-radius: 1.1rem;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  padding: clamp(1rem, 4vw, 1.5rem);
+}
+
+.buy-later-editor-card > h2,
+.decision-panel > h2,
+.waiting-panel > h2,
+.resolved-panel > h2 {
+  margin: 0;
+}
+
+.buy-later-form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.buy-later-form > .field:not(.buy-later-name-field),
+.buy-later-form > .buy-later-price-row,
+.buy-later-form > .reconsideration-fieldset {
+  scroll-margin-top: 1rem;
+}
+
+.buy-later-editor-card > h2 + .buy-later-form {
+  margin-top: 1.25rem;
+}
+
+.field small {
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+}
+
+.buy-later-name-field input {
+  min-height: 3.45rem;
+  font-size: 1.05rem;
+}
+
+.buy-later-price-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(7rem, 0.4fr);
+  gap: 0.8rem;
+}
+
+.reconsideration-fieldset {
+  display: grid;
+  margin: 0;
+  border: 1px solid var(--color-primary-border);
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--color-primary-muted) 78%, var(--color-surface));
+  gap: 0.8rem;
+  padding: 1rem;
+}
+
+.reconsideration-fieldset legend {
+  padding-inline: 0.35rem;
+  font-weight: 750;
+}
+
+.reconsideration-fieldset > p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+.date-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.date-presets button {
+  min-height: 2.65rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: var(--color-surface-recessed);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 0.45rem 0.7rem;
+}
+
+.date-presets button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.date-presets button[aria-pressed="true"] {
+  border-color: var(--color-primary-border-strong);
+  background: color-mix(in srgb, var(--color-primary) 15%, var(--color-surface));
+  color: var(--color-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .date-presets button:hover:not([aria-pressed="true"]) {
+    border-color: var(--color-primary-border-strong);
+    color: var(--color-text);
+  }
+}
+
+.decision-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.decision-panel-due {
+  border-color: var(--color-primary-border-strong);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--color-primary) 9%, transparent), transparent 42%),
+    var(--color-surface);
+}
+
+.waiting-panel {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.waiting-summary {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.waiting-summary > p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.waiting-panel .waiting-date {
+  color: var(--color-text);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.waiting-panel .waiting-saved {
+  color: var(--color-text-tertiary);
+  font-size: 0.8rem;
+}
+
+.early-resolution-actions {
+  display: grid;
+  border-top: 1px solid var(--color-border);
+  gap: 0.75rem;
+  margin-top: 0;
+  padding-top: 1.15rem;
+}
+
+.early-resolution-actions > h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.early-resolution-actions > p:not(.section-kicker) {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.decision-reschedule {
+  display: grid;
+  border: 1px solid var(--color-primary-border);
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--color-primary-muted) 56%, transparent);
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.decision-option-heading {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.decision-option-heading span {
+  color: var(--color-text-muted);
+  font-size: 0.86rem;
+}
+
+.compact-presets button {
+  min-height: 2.45rem;
+}
+
+.decision-final-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.decision-final-actions > p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: 0.78rem;
+}
+
+.early-resolution-actions .decision-final-actions > p {
+  display: none;
+}
+
+.resolved-purchased {
+  border-color: var(--color-success-border);
+}
+
+.resolved-dismissed {
+  box-shadow: none;
+}
+
+.decision-final-actions form,
+.decision-final-actions button {
+  width: 100%;
+}
+
+.product-link {
+  display: inline-flex;
+  margin-top: 0.9rem;
+  color: var(--color-accent-soft);
+  font-weight: 650;
+}
+
+.buy-later-delete {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0;
+}
+
+.buy-later-delete h2,
+.buy-later-delete p {
+  margin-block: 0;
+}
+
+.buy-later-delete p:last-child {
+  margin-top: 0.35rem;
+}
+
+.buy-later-delete form {
+  display: grid;
+  gap: 0.5rem;
+}
+
 @keyframes loading-spin {
   to {
     transform: rotate(360deg);
@@ -2017,9 +2492,43 @@ h2 {
   .item-delete-zone .danger-button {
     width: 100%;
   }
+
+  .buy-later-heading-row,
+  .buy-later-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .buy-later-price-row,
+  .decision-final-actions,
+  .buy-later-delete {
+    grid-template-columns: 1fr;
+  }
+
+  .buy-later-empty {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .buy-later-empty .primary-link {
+    grid-column: 1 / -1;
+  }
+
+  .buy-later-delete form,
+  .buy-later-delete button {
+    width: 100%;
+  }
 }
 
 @media (max-width: 22rem) {
+  .buy-later-empty {
+    grid-template-columns: 1fr;
+  }
+
+  .buy-later-empty .primary-link {
+    grid-column: auto;
+    width: 100%;
+  }
+
   .location-browser {
     padding: 1rem;
   }
@@ -2172,6 +2681,7 @@ h2 {
   .primary-link,
   .secondary-link,
   .primary-button,
+  .secondary-button,
   .danger-button {
     transition: none;
   }

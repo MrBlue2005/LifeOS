@@ -5,5 +5,14 @@ export const buyLaterModule = {
   name: "Buy Later",
   description: "Save it now. Decide later.",
   href: "/buy-later",
-  status: "coming-soon",
+  status: "available",
 } satisfies LifeOSModuleDefinition;
+
+export { requireBuyLaterUser } from "./access";
+export {
+  BuyLaterConfigurationRequired,
+  BuyLaterHistoryScreen,
+  BuyLaterHomeScreen,
+  BuyLaterItemScreen,
+  NewBuyLaterItemScreen,
+} from "./screens";

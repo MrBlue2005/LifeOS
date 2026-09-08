@@ -89,29 +89,29 @@ Photo recognition is not required to prove the Find It MVP. It may enter only af
 
 ## Buy Later MVP — follows Find It
 
+**Implementation and validation status:** The Phase 2 MVP migration is applied to the linked remote Supabase development project, and local and remote migration histories are synchronized. Manual purchase-intention entry, optional URL/price/currency/note, Waiting and Due states, explicit rescheduling, purchased/dismissed outcomes, history, separate permanent deletion, and cross-user RLS isolation passed live validation. Reconsideration presets and custom dates also passed real-iPhone LAN validation. The local-oriented Buy Later pgTAP suite has not yet been executed.
+
 ### Core success story
 
 **“I saved something I may want to buy, RX LifeOS remembers it, and helps me decide later.”**
 
 ### MUST HAVE
 
-- Save a purchase intention with product name and optional URL and notes.
+- Save a purchase intention with product name, optional URL, optional current price/currency, and optional notes.
 - Capture the date added automatically.
 - Let the user choose or receive a sensible default reconsideration date.
 - Show active saved items and item details.
 - Surface due reconsiderations in-app.
-- Support **Yes**, **No**, and **Ask me later** decisions with explicit state transitions.
-- Archive a “No” decision and allow the user to view archived items.
-- Edit, reopen, or delete saved intentions with clear behavior.
+- Support explicit transitions from **considering** to **purchased** or **dismissed**, plus an “I still want it” action that requires a new future reconsideration date.
+- Keep purchased and dismissed decisions available in history.
+- Edit considering or resolved intentions and permanently delete them with clear behavior.
 - Enforce authentication and ownership on every operation.
-- Include focused tests for due dates, decision transitions, archive/reopen behavior, ownership isolation, and the save-then-decide journey.
-
-“Yes” means the user still wants the item; the exact next state (keep active, mark planned, or set another date) should be settled during flow design without turning the MVP into purchasing software.
+- Include focused tests for due dates, decision transitions, ownership isolation, and the save-then-decide journey.
 
 ### SHOULD HAVE
 
 - External reminder delivery through one justified channel, subject to consent and preference handling.
-- Optional store, observed price/currency, target price, priority, and category fields.
+- Optional store, target price, priority, and category fields.
 - Optional product image/reference after its privacy, storage, and deletion behavior is defined.
 - Simple calculated insights such as days waited and the total entered value of items archived after “No.”
 - Manual price observations and deterministic comparison with the saved/target price.
@@ -140,6 +140,6 @@ Photo recognition is not required to prove the Find It MVP. It may enter only af
 
 Find It is ready to validate when an authenticated user can create a nested location, save an item there, leave, return, search by name, and see the correct full path—with verified isolation from other users.
 
-Buy Later is ready to validate when an authenticated user can save a purchase intention, receive an in-app due prompt at the intended time, choose Yes/No/Ask me later, and later understand the resulting state—with no dependency on automatic price retrieval.
+Buy Later is ready to validate when an authenticated user can save a purchase intention, see an in-app due prompt at the intended time, reschedule it or mark it purchased/dismissed, and later understand the resulting state—with no dependency on automatic price retrieval.
 
 Capabilities move from SHOULD HAVE or LATER only when evidence shows they improve these loops enough to justify complexity, risk, privacy exposure, and operating cost.

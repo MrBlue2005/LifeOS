@@ -9,6 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      buy_later_items: {
+        Row: {
+          created_at: string;
+          currency: string | null;
+          current_price: string | null;
+          id: string;
+          name: string;
+          note: string | null;
+          product_url: string | null;
+          reconsider_at: string;
+          resolved_at: string | null;
+          status: "considering" | "purchased" | "dismissed";
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          currency?: string | null;
+          current_price?: string | null;
+          id?: string;
+          name: string;
+          note?: string | null;
+          product_url?: string | null;
+          reconsider_at: string;
+          resolved_at?: string | null;
+          status?: "considering" | "purchased" | "dismissed";
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          currency?: string | null;
+          current_price?: string | null;
+          id?: string;
+          name?: string;
+          note?: string | null;
+          product_url?: string | null;
+          reconsider_at?: string;
+          resolved_at?: string | null;
+          status?: "considering" | "purchased" | "dismissed";
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       find_it_items: {
         Row: {
           created_at: string;

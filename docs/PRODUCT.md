@@ -48,9 +48,9 @@ Find It is the first implementation priority because it establishes the Core own
 
 ### Buy Later
 
-Buy Later collects purchase intentions that otherwise remain scattered among bookmarks, tabs, screenshots, messages, notes, email, and store wishlists. A saved item may include its product name, URL, store, observed price and currency, image, category, date added, notes, priority, and target price.
+Buy Later collects purchase intentions that otherwise remain scattered among bookmarks, tabs, screenshots, messages, notes, email, and store wishlists. The MVP stores a product name, optional URL, optional current price and currency, optional note, date added, and a user-selected reconsideration date.
 
-Its differentiator is deliberate waiting, not universal price tracking. At an appropriate time, RX LifeOS asks whether the user still wants the item and supports **Yes**, **No**, or **Ask me later**. Useful insights—time waited, price change when observations exist, money not spent after archiving—should be calculated from stored data.
+Its differentiator is deliberate waiting, not universal price tracking. When an item is due, RX LifeOS asks whether the user still wants it. The user can set another future date, mark it purchased, or dismiss it; resolved items remain understandable in history. The MVP performs no scraping, metadata fetching, automatic price tracking, external notifications, or AI calls.
 
 The essential promise is: **“I saved something I may want to buy, RX LifeOS remembers it, and helps me decide later.”**
 

@@ -75,9 +75,9 @@ Buy Later owns:
 
 - saved purchase intentions;
 - product links and user-entered/extracted metadata;
-- observed and target prices when available;
+- user-entered current price and future price observations when available;
 - reconsideration timing and decision state;
-- archive/reopen behavior;
+- purchased/dismissed resolution and history behavior;
 - Buy Later reminders and derived insights;
 - future source-specific extraction/price observation adapters;
 - module-specific routes, commands, queries, validation, and UI.
@@ -284,9 +284,15 @@ Phase 0 uses the App Router for composition, small shared shell components under
 
 ### Phase 1 implementation boundary
 
-Core now provides email/password authentication and cookie-based Supabase SSR infrastructure. Find It owns its validation, hierarchy utilities, server actions, user-scoped queries, and route UI. PostgreSQL constraints and RLS remain the final authorization/integrity boundary even though server actions also derive and filter by the verified user ID. Buy Later remains independent and unimplemented.
+Core provides email/password authentication and cookie-based Supabase SSR infrastructure. Find It owns its validation, hierarchy utilities, server actions, user-scoped queries, and route UI. PostgreSQL constraints and RLS remain the final authorization/integrity boundary even though server actions also derive and filter by the verified user ID.
 
 Phase 1 has been manually validated against the remote Supabase development project: authentication, authenticated location hierarchy CRUD, item CRUD and movement, deterministic search, complete path retrieval, safe non-empty location deletion blocking, and cross-user visibility isolation all succeeded in the tested workflow. Repository lint, type checking, unit/domain tests, and production builds are automatically validated. The pgTAP suite remains unexecuted because it depends on a local Supabase/PostgreSQL environment and Supabase testing helpers; those helpers were intentionally not added to the remote development database solely for test execution.
+
+### Phase 2 implementation boundary
+
+Buy Later owns one `buy_later_items` table and its routes, validation, exact decimal-string price handling, lifecycle rules, server actions, user-scoped queries, and UI. An item begins as `considering`; it may be rescheduled to a future date while remaining active or transition once to `purchased` or `dismissed`. Resolution time is stored explicitly, and resolved records form the history view. The schema enforces owner identity, field limits, price/currency pairing, lifecycle consistency, and RLS in addition to application checks.
+
+The Phase 2 migration is applied to the linked remote Supabase development project, with local and remote migration histories synchronized. The complete save, wait, reconsider, reschedule, purchase, dismiss, history, and separate permanent-delete lifecycle has been manually validated live, including cross-user RLS isolation. Reconsideration presets and custom dates were also validated on a real iPhone over LAN development access. The local-oriented Buy Later pgTAP suite has not yet been executed. Due items are derived deterministically from `reconsider_at` during ordinary page loads; there is no scheduler, external notification channel, automatic URL fetching, scraping, price tracking, AI, image storage, or cross-module coupling.
 
 ## Open decisions
 

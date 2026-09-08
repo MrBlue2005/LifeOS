@@ -2,12 +2,12 @@
 
 **Your everyday operating system.**
 
-RX LifeOS is a modular quality-of-life application. It is currently in **Phase 1: Find It MVP**. Find It supports private location hierarchies, physical items, deterministic search, and current-location recall through Supabase Auth and PostgreSQL.
+RX LifeOS is a modular quality-of-life application. **Find It** and the **Phase 2: Buy Later MVP** are operationally validated against the remote Supabase development project. Find It supports private location hierarchies and current-location recall; Buy Later supports deliberate purchase reconsideration. Both use Supabase Auth and PostgreSQL.
 
 Current modules:
 
 - **Find It** — know where everything is. The first MVP is implemented.
-- **Buy Later** — save it now, decide later. This follows the Find It MVP.
+- **Buy Later** — save it now, decide later. Its manual save, reconsider, resolve, and history loop is operationally validated.
 
 ## Local development
 
@@ -32,7 +32,7 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 
 These values identify the public Data API client; authorization is enforced by authenticated sessions and Row Level Security. No service-role key is used by the application.
 
-3. Apply [the Find It migration](supabase/migrations/20260904170000_create_find_it.sql). With the Supabase CLI:
+3. Apply the ordered migrations in [`supabase/migrations`](supabase/migrations). With the Supabase CLI:
 
 ```bash
 npx supabase@latest login
@@ -69,6 +69,13 @@ Phase 1 validation status:
 - **Manually validated against the remote Supabase development project:** email/password sign-up and sign-in, authenticated Find It access, root and nested location hierarchy CRUD exercised in the tested workflow, item CRUD and movement exercised in the tested workflow, deterministic partial search, complete location paths, non-empty location deletion protection, and cross-user data isolation through RLS.
 - **Not yet executed:** the repository's [pgTAP database test suite](supabase/tests/find_it_rls.test.sql).
 
+Phase 2 validation status:
+
+- **Migration synchronized:** `20260907170000_create_buy_later.sql` is applied to the linked remote Supabase development project, and local and remote migration histories match.
+- **Manually validated:** manual item saving, optional URL/price/currency/note, Waiting and Due states, rescheduling through “I still want it,” Purchased, Dismissed, History, separate permanent deletion, and cross-user isolation through RLS.
+- **Real-device validated:** reconsideration presets and the custom date control work on an iPhone over the allowed LAN development origin.
+- **Not yet executed:** the local-oriented [Buy Later pgTAP suite](supabase/tests/buy_later_rls.test.sql).
+
 The pgTAP suite targets a Supabase CLI local database with the current Supabase testing helpers, including the `tests` schema:
 
 ```bash
@@ -84,7 +91,7 @@ RX LifeOS is a Next.js and TypeScript modular monolith:
 - `src/app` composes routes and the application shell.
 - `src/core` contains shared platform code, including authentication, the Supabase SSR boundary, and the small typed module registry.
 - `src/modules/find-it` owns Find It validation, hierarchy rules, data access, mutations, and UI.
-- `src/modules/buy-later` remains a metadata-only placeholder.
+- `src/modules/buy-later` owns Buy Later validation, lifecycle rules, data access, mutations, and UI.
 - `supabase/migrations` owns reproducible PostgreSQL schema and RLS changes.
 
 Modules may depend on Core public interfaces but must not import each other's internals. PostgreSQL is the durable source of truth. All current Supabase access is server-side and user-scoped; the publishable key is never treated as authorization. AI remains deferred and is not application memory.

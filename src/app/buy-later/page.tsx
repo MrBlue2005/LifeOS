@@ -1,18 +1,11 @@
 import type { Metadata } from "next";
+import { BuyLaterConfigurationRequired, BuyLaterHomeScreen, buyLaterModule, requireBuyLaterUser } from "@/modules/buy-later";
 
-import { ModulePlaceholder } from "@/core/components/module-placeholder";
-import { buyLaterModule } from "@/modules/buy-later";
+export const metadata: Metadata = { title: buyLaterModule.name, description: buyLaterModule.description };
+export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: buyLaterModule.name,
-  description: buyLaterModule.description,
-};
-
-export default function BuyLaterPage() {
-  return (
-    <ModulePlaceholder
-      moduleDefinition={buyLaterModule}
-      phaseNote="Buy Later is planned after the Find It MVP. Purchase and reconsideration features are not implemented yet."
-    />
-  );
+export default async function BuyLaterPage({ searchParams }: Readonly<{ searchParams: Promise<{ notice?: string }> }>) {
+  const user = await requireBuyLaterUser("/buy-later");
+  if (!user) return <BuyLaterConfigurationRequired />;
+  return <BuyLaterHomeScreen notice={(await searchParams).notice} userId={user.id} />;
 }

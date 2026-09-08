@@ -76,20 +76,22 @@ Target users repeatedly save items into arbitrary nested locations and later ret
 
 ## Phase 2 — Buy Later MVP
 
+**Status:** Implemented and operationally validated against the linked remote Supabase development project, with synchronized migration history. Manual save/edit/delete, optional URL and price/currency, Waiting and Due views, explicit rescheduling, purchased/dismissed outcomes, history, real-iPhone LAN reconsideration controls, and cross-user RLS isolation passed live validation. The local-oriented Buy Later pgTAP suite has not yet been executed. No automatic fetching, notifications, scraping, or AI were introduced.
+
 ### Objective
 
 Make the promise **“I saved something I may want to buy, RX LifeOS remembers it, and helps me decide later”** useful without depending on universal automatic price tracking.
 
 ### Major deliverables
 
-- Purchase-intention create, view, edit, archive/delete, and reopen flows.
-- Optional URL and notes in the initial save flow.
+- Purchase-intention create, view, edit, permanent-delete, and history flows.
+- Optional URL, current price/currency, and notes in the initial save flow.
 - Automatic date-added and an explicit/default reconsideration date.
-- Due reconsideration experience with Yes, No, and Ask me later transitions.
-- In-app reminder delivery; add one external channel only if validated and operationally justified.
+- Due reconsideration experience with reschedule, purchased, and dismissed transitions.
+- In-app due-state presentation; add an external reminder channel only if validated and operationally justified.
 - Deterministic insights such as waiting time and supported archived-value totals.
-- Optional manual price observations and comparisons.
-- Optional store, price/currency, target price, priority, category, and product image/reference metadata after the core decision flow is stable.
+- Optional manual price observations and comparisons beyond the current saved price.
+- Optional store, target price, priority, category, and product image/reference metadata after the core decision flow is stable.
 - Ownership, state-transition, scheduling, idempotency, and critical end-to-end tests.
 - Investigation of limited metadata capture that remains user-reviewable and source-compliant.
 

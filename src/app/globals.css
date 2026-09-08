@@ -2141,6 +2141,26 @@ h2 {
   justify-content: flex-end;
 }
 
+.reminder-settings {
+  display: grid;
+  border: 1px solid var(--color-border);
+  border-radius: 1.1rem;
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  gap: 0.9rem;
+  padding: clamp(1rem, 4vw, 1.35rem);
+}
+
+.reminder-settings h2,
+.reminder-settings p { margin: 0; }
+.reminder-settings > div > p:last-child,
+.reminder-status { color: var(--color-text-muted); }
+.reminder-status { font-size: 0.9rem; }
+.reminder-settings > button { justify-self: start; }
+.reminder-privacy { display: flex; align-items: flex-start; gap: 0.7rem; cursor: pointer; }
+.reminder-privacy input { width: 1.1rem; height: 1.1rem; margin-top: 0.16rem; accent-color: var(--color-primary); }
+.reminder-privacy span { display: grid; gap: 0.12rem; }
+.reminder-privacy small { color: var(--color-text-muted); font-size: 0.82rem; }
+
 .buy-later-history {
   max-width: 52rem;
 }

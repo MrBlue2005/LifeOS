@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BuyLaterItem } from "./types";
 
-const queryMocks = vi.hoisted(() => ({ getBuyLaterItem: vi.fn(), listConsideringItems: vi.fn(), listResolvedItems: vi.fn() }));
+const queryMocks = vi.hoisted(() => ({ getBuyLaterItem: vi.fn(), getBuyLaterNotificationPreferences: vi.fn(), listConsideringItems: vi.fn(), listResolvedItems: vi.fn() }));
 vi.mock("./data/queries", () => queryMocks);
 import { parseBuyLaterIntake } from "./domain/intake";
 import { BuyLaterHistoryScreen, BuyLaterHomeScreen, BuyLaterImportScreen, BuyLaterItemScreen, NewBuyLaterItemScreen } from "./screens";
@@ -19,6 +19,7 @@ describe("Buy Later screens", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-09-08T12:00:00.000Z"));
     Object.values(queryMocks).forEach((mock) => mock.mockReset());
+    queryMocks.getBuyLaterNotificationPreferences.mockResolvedValue(null);
   });
 
   afterEach(() => vi.useRealTimers());
@@ -29,6 +30,7 @@ describe("Buy Later screens", () => {
     expect(html).toContain("Buy with a clearer head.");
     expect(html).toContain("Due now");
     expect(html).toContain("Save an item");
+    expect(html).toContain("Remind me when items are ready to reconsider.");
     expect(html).not.toContain("Still considering");
     expect(html).not.toContain("Everything active is ready to review.");
     expect(html).toContain('href="/buy-later/history"');

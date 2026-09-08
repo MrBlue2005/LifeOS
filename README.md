@@ -79,10 +79,11 @@ Phase 1 validation status:
 
 Phase 2 validation status:
 
-- **Migration synchronized:** `20260907170000_create_buy_later.sql` is applied to the linked remote Supabase development project, and local and remote migration histories match.
+- **Migration synchronized through Phase 2.10B:** `20260907170000_create_buy_later.sql`, `20260908170000_create_buy_later_notifications.sql`, and `20260908180000_add_buy_later_push_mutations.sql` are applied to the linked remote Supabase development project.
 - **Manually validated:** manual item saving, optional URL/price/currency/note, Waiting and Due states, rescheduling through “I still want it,” Purchased, Dismissed, History, separate permanent deletion, and cross-user isolation through RLS.
 - **Real-device validated:** reconsideration presets and the custom date control work on an iPhone over the allowed LAN development origin.
 - **Production Share Intake validated:** Phase 2.6 authenticated URL intake, Phase 2.7 title-only metadata enrichment, and Phase 2.8 local URL-slug fallback work through `eMAG App → Apple Shortcut “Save To RX LifeOS” → /buy-later/import?url=... → review → explicit Save`.
+- **Notification opt-in (local Phase 2.10B):** a push-only service worker, explicit permission flow, browser subscription persistence, timezone capture, privacy preference, and disable flow are implemented locally. Scheduled detection and outbound delivery are not implemented.
 - **Not yet executed:** the local-oriented [Buy Later pgTAP suite](supabase/tests/buy_later_rls.test.sql).
 
 The pgTAP suite targets a Supabase CLI local database with the current Supabase testing helpers, including the `tests` schema:

@@ -54,6 +54,135 @@ export type Database = {
         };
         Relationships: [];
       };
+      buy_later_notification_preferences: {
+        Row: {
+          created_at: string;
+          include_item_name: boolean;
+          push_enabled: boolean;
+          timezone: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          include_item_name?: boolean;
+          push_enabled?: boolean;
+          timezone: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          include_item_name?: boolean;
+          push_enabled?: boolean;
+          timezone?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      buy_later_push_subscriptions: {
+        Row: {
+          active: boolean;
+          auth: string;
+          created_at: string;
+          endpoint: string;
+          expiration_time: string | null;
+          id: string;
+          p256dh: string;
+          revoked_at: string | null;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          active?: boolean;
+          auth: string;
+          created_at?: string;
+          endpoint: string;
+          expiration_time?: string | null;
+          id?: string;
+          p256dh: string;
+          revoked_at?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          active?: boolean;
+          auth?: string;
+          created_at?: string;
+          endpoint?: string;
+          expiration_time?: string | null;
+          id?: string;
+          p256dh?: string;
+          revoked_at?: string | null;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      buy_later_reminder_deliveries: {
+        Row: {
+          attempted_at: string | null;
+          channel: "web_push";
+          created_at: string;
+          failed_at: string | null;
+          id: string;
+          item_id: string;
+          reconsider_at: string;
+          revoked_at: string | null;
+          sent_at: string | null;
+          state: "claimed" | "sent" | "failed" | "revoked";
+          subscription_id: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          attempted_at?: string | null;
+          channel?: "web_push";
+          created_at?: string;
+          failed_at?: string | null;
+          id?: string;
+          item_id: string;
+          reconsider_at: string;
+          revoked_at?: string | null;
+          sent_at?: string | null;
+          state?: "claimed" | "sent" | "failed" | "revoked";
+          subscription_id: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          attempted_at?: string | null;
+          channel?: "web_push";
+          created_at?: string;
+          failed_at?: string | null;
+          id?: string;
+          item_id?: string;
+          reconsider_at?: string;
+          revoked_at?: string | null;
+          sent_at?: string | null;
+          state?: "claimed" | "sent" | "failed" | "revoked";
+          subscription_id?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "buy_later_reminder_deliveries_user_item_fkey";
+            columns: ["user_id", "item_id"];
+            isOneToOne: false;
+            referencedRelation: "buy_later_items";
+            referencedColumns: ["user_id", "id"];
+          },
+          {
+            foreignKeyName: "buy_later_reminder_deliveries_user_subscription_fkey";
+            columns: ["user_id", "subscription_id"];
+            isOneToOne: false;
+            referencedRelation: "buy_later_push_subscriptions";
+            referencedColumns: ["user_id", "id"];
+          },
+        ];
+      };
       find_it_items: {
         Row: {
           created_at: string;
@@ -129,7 +258,23 @@ export type Database = {
       };
     };
     Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Functions: {
+      disable_buy_later_push_reminders: {
+        Args: { subscription_endpoint?: string | null };
+        Returns: undefined;
+      };
+      enable_buy_later_push_reminders: {
+        Args: {
+          preference_timezone: string;
+          preference_include_item_name: boolean;
+          subscription_endpoint: string;
+          subscription_p256dh: string;
+          subscription_auth: string;
+          subscription_expiration_time?: string | null;
+        };
+        Returns: string;
+      };
+    };
     Enums: Record<never, never>;
     CompositeTypes: Record<never, never>;
   };

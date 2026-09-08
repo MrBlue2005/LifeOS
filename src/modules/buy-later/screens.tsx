@@ -9,6 +9,8 @@ import { formatCalendarDate, formatReconsiderationDistance, isBuyLaterItemDue, t
 import { formatPrice } from "./domain/money";
 import { normalizeProductUrl, productDomain } from "./domain/url";
 import { getBuyLaterItem, listConsideringItems, listResolvedItems } from "./data/queries";
+import { getBuyLaterNotificationPreferences } from "./data/queries";
+import { BuyLaterReminderSettings } from "./components/reminder-settings";
 import { isUuid } from "./domain/validation";
 import type { BuyLaterIntake } from "./domain/intake";
 import type { BuyLaterItem } from "./types";
@@ -47,7 +49,7 @@ function ItemCard({ item, today, history = false }: Readonly<{ item: BuyLaterIte
 export function BuyLaterConfigurationRequired() { return <ConfigurationRequired />; }
 
 export async function BuyLaterHomeScreen({ userId, notice }: Readonly<{ userId: string; notice?: string }>) {
-  const items = await listConsideringItems(userId);
+  const [items, preferences] = await Promise.all([listConsideringItems(userId), getBuyLaterNotificationPreferences(userId)]);
   const today = todayDateString();
   const dueItems = items.filter((item) => isBuyLaterItemDue(item, today));
   const upcomingItems = items.filter((item) => !isBuyLaterItemDue(item, today));
@@ -66,6 +68,7 @@ export async function BuyLaterHomeScreen({ userId, notice }: Readonly<{ userId: 
       <div className="buy-later-section-heading"><div><p className="section-kicker">Waiting</p><h2 id="considering-title">Still considering</h2></div><Link className="secondary-link" href="/buy-later/history">History</Link></div>
       {upcomingItems.length ? <ul className="buy-later-list">{upcomingItems.map((item) => <ItemCard item={item} key={item.id} today={today} />)}</ul> : <div className="buy-later-empty"><PauseIcon /><div><strong>{hasItems ? "Everything active is ready to review." : "Give a purchase some breathing room."}</strong><p>{hasItems ? "The items above are waiting for your decision." : "Save something you may want, choose a reconsideration date, and come back with a clearer head."}</p></div>{!hasItems ? <Link className="primary-link" href="/buy-later/items/new">Save your first item</Link> : null}</div>}
     </section> : <nav className="buy-later-home-history" aria-label="Buy Later history"><Link className="secondary-link" href="/buy-later/history">History</Link></nav>}
+    <BuyLaterReminderSettings includeItemName={preferences?.includeItemName ?? false} pushEnabled={preferences?.pushEnabled ?? false} vapidPublicKey={process.env.NEXT_PUBLIC_WEB_PUSH_VAPID_PUBLIC_KEY} />
   </div>;
 }
 

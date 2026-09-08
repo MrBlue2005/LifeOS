@@ -11,6 +11,7 @@ import {
   validateNewReconsiderationDate,
 } from "./domain/validation";
 import type { BuyLaterActionState, BuyLaterStatus } from "./types";
+import { validatePushSubscription, validateReminderTimeZone, type SerializedPushSubscription } from "./domain/push-subscription";
 
 function actionError(
   message: string,
@@ -146,4 +147,56 @@ export async function deleteBuyLaterItemAction(
   if (error || !data) return actionError("Could not permanently delete this item.");
   revalidateBuyLater(itemId);
   redirect("/buy-later?notice=item-deleted");
+}
+
+export type ReminderActionResult = Readonly<{ ok: boolean; message?: string }>;
+
+function reminderError(message: string): ReminderActionResult { return { ok: false, message }; }
+
+export async function enableBuyLaterRemindersAction(input: Readonly<{
+  timezone: string; includeItemName: boolean; subscription: SerializedPushSubscription;
+}>): Promise<ReminderActionResult> {
+  const context = await getActionContext();
+  if (!context) return reminderError("Your session has expired. Sign in and try again.");
+  try {
+    const timezone = validateReminderTimeZone(input.timezone);
+    const subscription = validatePushSubscription(input.subscription);
+    const { data, error } = await context.supabase.rpc("enable_buy_later_push_reminders", {
+      preference_timezone: timezone,
+      preference_include_item_name: input.includeItemName,
+      subscription_endpoint: subscription.endpoint,
+      subscription_p256dh: subscription.p256dh,
+      subscription_auth: subscription.auth,
+      subscription_expiration_time: subscription.expirationTime,
+    });
+    if (error) return reminderError("Could not secure reminders on this device. Try again.");
+    if (data !== "enabled") return reminderError("This browser subscription is already associated with another account.");
+    revalidatePath("/buy-later");
+    return { ok: true };
+  } catch (error) {
+    return reminderError(error instanceof Error ? error.message : "Could not enable reminders.");
+  }
+}
+
+export async function disableBuyLaterRemindersAction(endpoint: string | null): Promise<ReminderActionResult> {
+  const context = await getActionContext();
+  if (!context) return reminderError("Your session has expired. Sign in and try again.");
+  if (endpoint !== null) {
+    try { validatePushSubscription({ endpoint, p256dh: "x", auth: "x", expirationTime: null }); }
+    catch { return reminderError("This browser returned an invalid push subscription."); }
+  }
+  const { error } = await context.supabase.rpc("disable_buy_later_push_reminders", { subscription_endpoint: endpoint });
+  if (error) return reminderError("Could not disable server reminders. Try again.");
+  revalidatePath("/buy-later");
+  return { ok: true };
+}
+
+export async function updateBuyLaterNotificationPrivacyAction(includeItemName: boolean): Promise<ReminderActionResult> {
+  const context = await getActionContext();
+  if (!context) return reminderError("Your session has expired. Sign in and try again.");
+  const { error } = await context.supabase.from("buy_later_notification_preferences")
+    .update({ include_item_name: includeItemName }).eq("user_id", context.user.id);
+  if (error) return reminderError("Could not update notification privacy. Try again.");
+  revalidatePath("/buy-later");
+  return { ok: true };
 }

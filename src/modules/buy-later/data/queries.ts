@@ -43,3 +43,11 @@ export async function getBuyLaterItem(userId: string, itemId: string): Promise<B
   if (error) throw new Error("Could not load this Buy Later item.");
   return data ? mapItem(data) : null;
 }
+
+export async function getBuyLaterNotificationPreferences(userId: string): Promise<{ pushEnabled: boolean; includeItemName: boolean } | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.from("buy_later_notification_preferences")
+    .select("push_enabled,include_item_name").eq("user_id", userId).maybeSingle();
+  if (error) throw new Error("Could not load reminder preferences.");
+  return data ? { pushEnabled: data.push_enabled, includeItemName: data.include_item_name } : null;
+}

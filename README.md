@@ -2,7 +2,7 @@
 
 **Your everyday operating system.**
 
-RX LifeOS is a modular quality-of-life application. **Find It** and the **Phase 2: Buy Later MVP** are operationally validated against the remote Supabase development project. Find It supports private location hierarchies and current-location recall; Buy Later supports deliberate purchase reconsideration. Both use Supabase Auth and PostgreSQL.
+RX LifeOS is a modular quality-of-life application. **Find It** (including Phase 1.5 UX polish and Phase 1.6 deployment/PWA readiness) and the **Phase 2 Buy Later MVP** are operationally validated against the remote Supabase development project. Find It supports private location hierarchies and current-location recall; Buy Later supports deliberate purchase reconsideration and production-validated Share Intake. Both use Supabase Auth and PostgreSQL.
 
 Current modules:
 
@@ -82,6 +82,7 @@ Phase 2 validation status:
 - **Migration synchronized:** `20260907170000_create_buy_later.sql` is applied to the linked remote Supabase development project, and local and remote migration histories match.
 - **Manually validated:** manual item saving, optional URL/price/currency/note, Waiting and Due states, rescheduling through “I still want it,” Purchased, Dismissed, History, separate permanent deletion, and cross-user isolation through RLS.
 - **Real-device validated:** reconsideration presets and the custom date control work on an iPhone over the allowed LAN development origin.
+- **Production Share Intake validated:** Phase 2.6 authenticated URL intake, Phase 2.7 title-only metadata enrichment, and Phase 2.8 local URL-slug fallback work through `eMAG App → Apple Shortcut “Save To RX LifeOS” → /buy-later/import?url=... → review → explicit Save`.
 - **Not yet executed:** the local-oriented [Buy Later pgTAP suite](supabase/tests/buy_later_rls.test.sql).
 
 The pgTAP suite targets a Supabase CLI local database with the current Supabase testing helpers, including the `tests` schema:

@@ -305,7 +305,7 @@ These decisions should be made before the related implementation, not guessed no
 1. **Initial notification channel:** in-app only, email, or web push; browser support and consent UX must be evaluated.
 2. **Image policy:** maximum size, EXIF handling, retention after AI analysis, deletion timing, and acceptable Gemini/provider data terms.
 3. **Search threshold:** what measured failure rate justifies fuzzy, semantic, or LLM-assisted search.
-4. **Buy Later extraction:** manual entry versus limited browser-side/metadata-assisted capture in its first release.
+4. **Buy Later extraction:** narrow authenticated title enrichment is implemented: explicit title, then best-effort server-side title metadata, then local URL-slug fallback. Broader product extraction remains deferred pending a source-compliance, privacy, maintenance, and user-value decision; the existing SSRF and request-limit boundary remains mandatory for any future server-side fetch.
 5. **Price tracking:** supported merchants/methods, legal and Terms of Service review, reliability target, and cost ceiling before any automation.
 6. **Deployment regions and data residency:** driven by target users and privacy obligations.
 7. **Deletion/export requirements:** exact account, module-data, image, and derived-record lifecycle before production launch.

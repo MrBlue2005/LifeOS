@@ -40,7 +40,7 @@ The RX LifeOS shell runs locally, exposes its two placeholder modules through a 
 
 ## Phase 1 — Find It MVP
 
-**Status:** Implemented and operationally validated against the remote Supabase development project. Email/password authentication, the authenticated save/find/edit/move workflow, deterministic search with full paths, safe non-empty location deletion, and cross-user RLS isolation passed manual validation. Automated lint, type checking, unit/domain tests, and the production build pass. The local-oriented pgTAP database suite has not yet been executed.
+**Status:** Implemented and operationally validated against the remote Supabase development project. Email/password authentication, the authenticated save/find/edit/move workflow, deterministic search with full paths, safe non-empty location deletion, and cross-user RLS isolation passed manual validation. Phase 1.5 Find It UX polish and Phase 1.6 deployment/PWA readiness are complete. Automated lint, type checking, unit/domain tests, and the production build pass. The local-oriented pgTAP database suite has not yet been executed.
 
 ### Objective
 
@@ -76,7 +76,7 @@ Target users repeatedly save items into arbitrary nested locations and later ret
 
 ## Phase 2 — Buy Later MVP
 
-**Status:** Implemented and operationally validated against the linked remote Supabase development project, with synchronized migration history. Manual save/edit/delete, optional URL and price/currency, Waiting and Due views, explicit rescheduling, purchased/dismissed outcomes, history, real-iPhone LAN reconsideration controls, and cross-user RLS isolation passed live validation. The authenticated intake route now has optional title-only, best-effort server enrichment with manual fallback and explicit-save semantics. The local-oriented Buy Later pgTAP suite has not yet been executed. No recurring fetching, price extraction, broad scraping, notifications, or AI were introduced.
+**Status:** Implemented and operationally validated against the linked remote Supabase development project, with synchronized migration history. Manual save/edit/delete, optional URL and price/currency, Waiting and Due views, explicit rescheduling, purchased/dismissed outcomes, history, real-iPhone LAN reconsideration controls, and cross-user RLS isolation passed live validation. Phase 2.6 authenticated Share Intake, Phase 2.7 title-only metadata enrichment, and Phase 2.8 local URL slug fallback are complete, deployed, and production-validated through the iPhone Apple Shortcut flow. The intake resolves names in this order: explicit safe title → best-effort server-side metadata title → conservative local URL slug → manual entry. The local-oriented Buy Later pgTAP suite has not yet been executed. No recurring fetching, price extraction, broad scraping, native share target, notifications, or AI were introduced.
 
 ### Objective
 
@@ -93,7 +93,7 @@ Make the promise **“I saved something I may want to buy, RX LifeOS remembers i
 - Optional manual price observations and comparisons beyond the current saved price.
 - Optional store, target price, priority, category, and product image/reference metadata after the core decision flow is stable.
 - Ownership, state-transition, scheduling, idempotency, and critical end-to-end tests.
-- Investigation of limited metadata capture that remains user-reviewable and source-compliant.
+- Further limited metadata capture beyond the implemented title-only intake, only when user-reviewable and source-compliant.
 
 ### Success condition
 

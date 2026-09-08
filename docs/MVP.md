@@ -37,7 +37,7 @@ Priority labels:
 
 ## Find It MVP — first implementation priority
 
-**Implementation and validation status:** The Phase 1 code implements the MUST HAVE save/find/edit loop with user-only ownership, email/password Supabase Auth, current placement only, case-insensitive partial name search, generic hierarchical locations, blocked non-empty location deletion, and explicit item hard-delete. The loop has been manually validated against the remote Supabase development project, including cross-user RLS isolation. Lint, type checking, unit/domain tests, and the production build pass automatically. The local-oriented pgTAP database suite has not yet been executed.
+**Implementation and validation status:** The Phase 1 code implements the MUST HAVE save/find/edit loop with user-only ownership, email/password Supabase Auth, current placement only, case-insensitive partial name search, generic hierarchical locations, blocked non-empty location deletion, and explicit item hard-delete. Phase 1.5 Find It UX polish and Phase 1.6 deployment/PWA readiness are complete. The loop has been manually validated against the remote Supabase development project, including cross-user RLS isolation. Lint, type checking, unit/domain tests, and the production build pass automatically. The local-oriented pgTAP database suite has not yet been executed.
 
 ### Core success story
 
@@ -89,9 +89,9 @@ Photo recognition is not required to prove the Find It MVP. It may enter only af
 
 ## Buy Later MVP — follows Find It
 
-**Implementation and validation status:** The Phase 2 MVP migration is applied to the linked remote Supabase development project, and local and remote migration histories are synchronized. Manual purchase-intention entry, optional URL/price/currency/note, Waiting and Due states, explicit rescheduling, purchased/dismissed outcomes, history, separate permanent deletion, and cross-user RLS isolation passed live validation. Reconsideration presets and custom dates also passed real-iPhone LAN validation. The local-oriented Buy Later pgTAP suite has not yet been executed.
+**Implementation and validation status:** The Phase 2 MVP migration is applied to the linked remote Supabase development project, and local and remote migration histories are synchronized. Manual purchase-intention entry, optional URL/price/currency/note, Waiting and Due states, explicit rescheduling, purchased/dismissed outcomes, history, separate permanent deletion, and cross-user RLS isolation passed live validation. Reconsideration presets and custom dates also passed real-iPhone LAN validation. Phase 2.6 authenticated Share Intake, Phase 2.7 metadata title enrichment, and Phase 2.8 URL slug fallback are complete, deployed, and production-validated through the iPhone Apple Shortcut flow. The local-oriented Buy Later pgTAP suite has not yet been executed.
 
-The authenticated intake route resolves a title from an explicit shared title first, then title-only best-effort metadata, then a conservative local URL-slug fallback. The local fallback never adds a network request or merchant-specific scraper. The intake never extracts price or other product data, never calls AI, and never persists before the user reviews and submits the existing form. Unsupported or blocked pages still fall back to manual entry.
+The authenticated intake route resolves a title from an explicit shared title first, then title-only best-effort metadata, then a conservative local URL-slug fallback, then manual entry. The production iPhone flow is: eMAG App → Apple Shortcut “Save To RX LifeOS” → `/buy-later/import?url=...` → editable URL and name prefill → explicit Save. The local fallback never adds a network request or merchant-specific scraper. The intake never extracts price or other product data, never calls AI, and never persists before the user reviews and submits the existing form. Unsupported or blocked pages still fall back to manual entry.
 
 ### Core success story
 
@@ -124,7 +124,7 @@ The authenticated intake route resolves a title from an explicit shared title fi
 
 - Automatic recurring price checks.
 - Merchant APIs, affiliate APIs, third-party price services, or source-specific extraction adapters.
-- Native share extensions, browser integrations, Web Share Target support where available, and screenshot extraction. These may build on the authenticated `/buy-later/import` intake contract; no share integration is part of the current phase.
+- Native share extensions, browser integrations, Web Share Target support where available, and screenshot extraction. These may build on the implemented authenticated `/buy-later/import` intake contract. The current iPhone Apple Shortcut opens that URL; RX LifeOS does not implement a native share extension or Web Share Target.
 - Price-drop notifications.
 - AI-assisted normalization or classification.
 - Purchase completion, checkout, affiliate monetization, budgeting, or financial-account integrations.

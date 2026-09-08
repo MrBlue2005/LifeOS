@@ -294,6 +294,10 @@ Buy Later owns one `buy_later_items` table and its routes, validation, exact dec
 
 The Phase 2 migration is applied to the linked remote Supabase development project, with local and remote migration histories synchronized. The complete save, wait, reconsider, reschedule, purchase, dismiss, history, and separate permanent-delete lifecycle has been manually validated live, including cross-user RLS isolation. Reconsideration presets and custom dates were also validated on a real iPhone over LAN development access. The local-oriented Buy Later pgTAP suite has not yet been executed. Due items are derived deterministically from `reconsider_at` during ordinary page loads; there is no scheduler, external notification channel, automatic URL fetching, scraping, price tracking, AI, image storage, or cross-module coupling.
 
+### Buy Later intake contract
+
+`/buy-later/import` is the stable authenticated intake route for external purchase references. It accepts optional `url`, `title`, and `text` query parameters, validates them into existing Buy Later fields, and renders the standard Add Item form for explicit user review and submission. Loading the route never persists data and never fetches the supplied URL. This contract can later serve a native iOS Share Extension, Android or Web Share Target integrations where supported, and browser or shortcut integrations. No manifest `share_target` is declared because installed iOS PWAs do not currently provide a reliable Web Share Target path.
+
 ## Open decisions
 
 These decisions should be made before the related implementation, not guessed now:

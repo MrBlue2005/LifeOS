@@ -4,7 +4,8 @@ import type { BuyLaterItem } from "./types";
 
 const queryMocks = vi.hoisted(() => ({ getBuyLaterItem: vi.fn(), listConsideringItems: vi.fn(), listResolvedItems: vi.fn() }));
 vi.mock("./data/queries", () => queryMocks);
-import { BuyLaterHistoryScreen, BuyLaterHomeScreen, BuyLaterItemScreen } from "./screens";
+import { parseBuyLaterIntake } from "./domain/intake";
+import { BuyLaterHistoryScreen, BuyLaterHomeScreen, BuyLaterImportScreen, BuyLaterItemScreen, NewBuyLaterItemScreen } from "./screens";
 
 const item: BuyLaterItem = {
   id: "40000000-0000-4000-8000-000000000001", userId: "30000000-0000-4000-8000-000000000001",
@@ -80,5 +81,30 @@ describe("Buy Later screens", () => {
     const html = renderToStaticMarkup(await BuyLaterHistoryScreen({ userId: item.userId }));
     expect(html).toContain("Past decisions");
     expect(html).toContain("Dismissed");
+  });
+
+  it("prefills the existing form without saving on intake render", () => {
+    const intake = parseBuyLaterIntake({
+      url: "https://example.com/product",
+      title: "Desk lamp",
+      text: "For the reading corner",
+    });
+    const html = renderToStaticMarkup(<BuyLaterImportScreen intake={intake} />);
+    expect(html).toContain("Save to Buy Later");
+    expect(html).toContain('name="name"');
+    expect(html).toContain('value="Desk lamp"');
+    expect(html).toContain('value="https://example.com/product"');
+    expect(html).toContain('name="note"');
+    expect(html).toContain("For the reading corner");
+    expect(html).toContain("Save for later");
+    expect(html).not.toContain("Saved for later.");
+  });
+
+  it("keeps the normal Add Item screen unchanged without prefill values", () => {
+    const html = renderToStaticMarkup(<NewBuyLaterItemScreen />);
+    expect(html).toContain("Save it for later");
+    expect(html).toContain('name="name"');
+    expect(html).not.toContain('value="Desk lamp"');
+    expect(html).not.toContain('value="https://example.com/product"');
   });
 });

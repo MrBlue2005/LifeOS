@@ -122,7 +122,7 @@ Photo recognition is not required to prove the Find It MVP. It may enter only af
 
 - Automatic recurring price checks.
 - Merchant APIs, affiliate APIs, third-party price services, or source-specific extraction adapters.
-- Browser extensions/share targets and screenshot extraction.
+- Native share extensions, browser integrations, Web Share Target support where available, and screenshot extraction. These may build on the authenticated `/buy-later/import` intake contract; no share integration is part of the current phase.
 - Price-drop notifications.
 - AI-assisted normalization or classification.
 - Purchase completion, checkout, affiliate monetization, budgeting, or financial-account integrations.

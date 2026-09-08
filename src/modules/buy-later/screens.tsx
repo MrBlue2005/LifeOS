@@ -10,6 +10,7 @@ import { formatPrice } from "./domain/money";
 import { normalizeProductUrl, productDomain } from "./domain/url";
 import { getBuyLaterItem, listConsideringItems, listResolvedItems } from "./data/queries";
 import { isUuid } from "./domain/validation";
+import type { BuyLaterIntake } from "./domain/intake";
 import type { BuyLaterItem } from "./types";
 
 function Notice({ value }: Readonly<{ value?: string }>) {
@@ -71,6 +72,13 @@ export async function BuyLaterHomeScreen({ userId, notice }: Readonly<{ userId: 
 export function NewBuyLaterItemScreen() {
   const today = todayDateString();
   return <div className="buy-later-page buy-later-narrow"><header className="module-heading buy-later-editor-heading"><div><div className="module-identity"><span className="module-identity-mark"><PauseIcon /></span><p><strong>Buy Later</strong></p></div><h1>Save it for later</h1><p className="heading-copy">Capture enough to recognize it, then choose when to reconsider.</p></div><Link className="secondary-link" href="/buy-later">Cancel</Link></header><section className="buy-later-editor-card"><BuyLaterItemForm today={today} /></section></div>;
+}
+
+export function BuyLaterImportScreen({ intake }: Readonly<{ intake: BuyLaterIntake }>) {
+  const today = todayDateString();
+  const hasInvalidUrl = intake.invalidFields.includes("url");
+  const hasInvalidText = intake.invalidFields.includes("title") || intake.invalidFields.includes("text");
+  return <div className="buy-later-page buy-later-narrow"><header className="module-heading buy-later-editor-heading"><div><div className="module-identity"><span className="module-identity-mark"><PauseIcon /></span><p><strong>Buy Later</strong></p></div><h1>Save to Buy Later</h1><p className="heading-copy">Review the shared details, choose when to reconsider, then save.</p></div><Link className="secondary-link" href="/buy-later">Cancel</Link></header>{hasInvalidUrl ? <p className="form-error" role="alert">The shared product link could not be used. You can enter it manually below.</p> : null}{hasInvalidText ? <p className="form-error" role="alert">Some shared text was too long to prefill. You can enter it manually below.</p> : null}<section className="buy-later-editor-card"><BuyLaterItemForm initialValues={intake.initialValues} today={today} /></section></div>;
 }
 
 export async function BuyLaterHistoryScreen({ userId }: Readonly<{ userId: string }>) {

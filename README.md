@@ -54,6 +54,14 @@ Alternatively, apply the migration through the Supabase SQL editor while establi
 npm run dev
 ```
 
+For local intake testing, an authenticated user can open a URL such as:
+
+```text
+/buy-later/import?url=https%3A%2F%2Fexample.com%2Fproduct
+```
+
+The route only prefills the existing Buy Later form; it does not fetch the product page or save without confirmation.
+
 ## Validation
 
 ```bash

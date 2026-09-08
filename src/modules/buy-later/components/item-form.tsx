@@ -11,7 +11,9 @@ function FieldError({ id, message }: Readonly<{ id: string; message?: string }>)
   return message ? <p className="field-error" id={id} role="alert">{message}</p> : null;
 }
 
-export function BuyLaterItemForm({ item, today }: Readonly<{ item?: BuyLaterItem; today: string }>) {
+type InitialValues = Readonly<{ name?: string; productUrl?: string; note?: string }>;
+
+export function BuyLaterItemForm({ item, today, initialValues }: Readonly<{ item?: BuyLaterItem; today: string; initialValues?: InitialValues }>) {
   const action = item ? updateBuyLaterItemAction : createBuyLaterItemAction;
   const [state, formAction] = useActionState(action, initialBuyLaterActionState);
   const presets = reconsiderationPresets(today);
@@ -23,13 +25,13 @@ export function BuyLaterItemForm({ item, today }: Readonly<{ item?: BuyLaterItem
       {item ? <input name="itemId" type="hidden" value={item.id} /> : null}
       <label className="field buy-later-name-field">
         <span>What is it?</span>
-        <input aria-describedby={state.fields.name ? "buy-name-error" : undefined} aria-invalid={Boolean(state.fields.name)} autoFocus={!item} defaultValue={state.values.name ?? item?.name ?? ""} maxLength={160} name="name" placeholder="Noise-cancelling headphones" required />
+        <input aria-describedby={state.fields.name ? "buy-name-error" : undefined} aria-invalid={Boolean(state.fields.name)} autoFocus={!item} defaultValue={state.values.name ?? item?.name ?? initialValues?.name ?? ""} maxLength={160} name="name" placeholder="Noise-cancelling headphones" required />
         <FieldError id="buy-name-error" message={state.fields.name} />
       </label>
 
       <label className="field">
         <span>Product link <small>Optional</small></span>
-        <input aria-describedby={state.fields.productUrl ? "buy-url-error" : "buy-url-hint"} aria-invalid={Boolean(state.fields.productUrl)} autoCapitalize="none" autoComplete="url" defaultValue={state.values.productUrl ?? item?.productUrl ?? ""} inputMode="url" maxLength={2048} name="productUrl" placeholder="https://store.example/product" />
+        <input aria-describedby={state.fields.productUrl ? "buy-url-error" : "buy-url-hint"} aria-invalid={Boolean(state.fields.productUrl)} autoCapitalize="none" autoComplete="url" defaultValue={state.values.productUrl ?? item?.productUrl ?? initialValues?.productUrl ?? ""} inputMode="url" maxLength={2048} name="productUrl" placeholder="https://store.example/product" />
         <span className="form-hint" id="buy-url-hint">Saved as a reference only. RX LifeOS will not fetch it.</span>
         <FieldError id="buy-url-error" message={state.fields.productUrl} />
       </label>
@@ -65,7 +67,7 @@ export function BuyLaterItemForm({ item, today }: Readonly<{ item?: BuyLaterItem
 
       <label className="field">
         <span>Note <small>Optional</small></span>
-        <textarea aria-describedby={state.fields.note ? "buy-note-error" : undefined} aria-invalid={Boolean(state.fields.note)} defaultValue={state.values.note ?? item?.note ?? ""} maxLength={1000} name="note" placeholder="What makes this worth considering?" />
+        <textarea aria-describedby={state.fields.note ? "buy-note-error" : undefined} aria-invalid={Boolean(state.fields.note)} defaultValue={state.values.note ?? item?.note ?? initialValues?.note ?? ""} maxLength={1000} name="note" placeholder="What makes this worth considering?" />
         <FieldError id="buy-note-error" message={state.fields.note} />
       </label>
 

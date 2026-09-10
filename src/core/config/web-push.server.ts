@@ -4,7 +4,8 @@ type WebPushServerConfig = Readonly<{
   subject: string;
 }>;
 
-const keyPattern = /^[A-Za-z0-9_-]{80,200}$/;
+const publicKeyPattern = /^[A-Za-z0-9_-]{80,200}$/;
+const privateKeyPattern = /^[A-Za-z0-9_-]{43}$/;
 
 function isValidSubject(value: string): boolean {
   if (value.startsWith("mailto:")) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.slice("mailto:".length));
@@ -16,7 +17,7 @@ export function parseWebPushServerConfig(environment: Record<string, string | un
   const privateKey = environment.WEB_PUSH_VAPID_PRIVATE_KEY?.trim();
   const subject = environment.WEB_PUSH_VAPID_SUBJECT?.trim();
   if (!publicKey && !privateKey && !subject) return null;
-  if (!publicKey || !privateKey || !subject || !keyPattern.test(publicKey) || !keyPattern.test(privateKey) || !isValidSubject(subject)) {
+  if (!publicKey || !privateKey || !subject || !publicKeyPattern.test(publicKey) || !privateKeyPattern.test(privateKey) || !isValidSubject(subject)) {
     throw new Error("Web Push server configuration is invalid.");
   }
   const browserKey = environment.NEXT_PUBLIC_WEB_PUSH_VAPID_PUBLIC_KEY?.trim();

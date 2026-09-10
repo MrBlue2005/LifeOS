@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
-import { disableBuyLaterRemindersAction, enableBuyLaterRemindersAction, updateBuyLaterNotificationPrivacyAction } from "../actions";
+import { disableBuyLaterRemindersAction, enableBuyLaterRemindersAction, sendBuyLaterTestNotificationAction, updateBuyLaterNotificationPrivacyAction } from "../actions";
 import { vapidPublicKeyToBytes } from "../domain/push-subscription";
 import { detectPushSupport, type PushSupport } from "./push-support";
 
@@ -78,6 +78,12 @@ export function BuyLaterReminderSettings({
     }); });
   }
 
+  function sendTest() {
+    startTransition(() => { void sendBuyLaterTestNotificationAction().then((result) => {
+      setMessage(result.ok ? `Test notification sent to ${result.sent} of ${result.attempted} device${result.attempted === 1 ? "" : "s"}.` : result.message ?? "Could not send a test notification.");
+    }); });
+  }
+
   const statusCopy: Record<ReminderStatus, string> = {
     checking: "Checking this browser…", unsupported: support?.standalone ? "Reminders are not supported in this web app." : "Reminders are unavailable here. On iPhone, open RX LifeOS from the Home Screen.",
     default: "Enable reminders when you want a nudge to reconsider.", denied: "Notifications are blocked. Allow them in your device settings to enable reminders.",
@@ -90,6 +96,8 @@ export function BuyLaterReminderSettings({
     <p className="reminder-status" role="status">{statusCopy[status]}</p>
     {status === "enabled" ? <>
       <label className="reminder-privacy"><input checked={privacy} disabled={pending} onChange={(event) => changePrivacy(event.target.checked)} type="checkbox" /> <span><strong>Show item names in notifications</strong><small>Item names may be visible on your lock screen.</small></span></label>
+      {message ? <p className="reminder-status" role="status">{message}</p> : null}
+      <button className="quiet-button" disabled={pending} onClick={sendTest} type="button">{pending ? "Sending…" : "Send test notification"}</button>
       <button className="secondary-button" disabled={pending} onClick={disable} type="button">{pending ? "Updating…" : "Disable reminders"}</button>
     </> : canEnable ? <button className="primary-button" disabled={pending || !support?.supported} onClick={enable} type="button">{pending ? "Enabling…" : "Enable reminders"}</button> : null}
   </section>;

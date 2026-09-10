@@ -11,10 +11,11 @@ describe("Buy Later push worker contract", () => {
     expect(worker).not.toContain('addEventListener("sync"');
   });
 
-  it("uses a fixed Buy Later path and only accepts a UUID item identifier", () => {
+  it("uses a safe payload contract and only accepts same-origin Buy Later paths", () => {
     expect(worker).toContain('const DEFAULT_PATH = "/buy-later"');
     expect(worker).toContain("ITEM_ID.test(value.itemId)");
-    expect(worker).not.toContain("payload.url");
+    expect(worker).toContain("typeof value.url === \"string\"");
+    expect(worker).toContain("safeText(payload?.body");
     expect(worker).toContain("new URL(client.url).origin === self.location.origin");
   });
 });

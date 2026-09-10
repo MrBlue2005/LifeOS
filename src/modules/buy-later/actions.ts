@@ -12,6 +12,7 @@ import {
 } from "./domain/validation";
 import type { BuyLaterActionState, BuyLaterStatus } from "./types";
 import { validatePushSubscription, validateReminderTimeZone, type SerializedPushSubscription } from "./domain/push-subscription";
+import { sendBuyLaterManualPushTest } from "./notifications/manual-test.server";
 
 function actionError(
   message: string,
@@ -199,4 +200,19 @@ export async function updateBuyLaterNotificationPrivacyAction(includeItemName: b
   if (error) return reminderError("Could not update notification privacy. Try again.");
   revalidatePath("/buy-later");
   return { ok: true };
+}
+
+export async function sendBuyLaterTestNotificationAction(): Promise<ReminderActionResult & { attempted?: number; sent?: number }> {
+  const context = await getActionContext();
+  if (!context) return reminderError("Your session has expired. Sign in and try again.");
+  const { data: preferences, error } = await context.supabase.from("buy_later_notification_preferences")
+    .select("push_enabled,include_item_name").eq("user_id", context.user.id).maybeSingle();
+  if (error || !preferences?.push_enabled) return reminderError("Enable reminders before sending a test notification.");
+  try {
+    const result = await sendBuyLaterManualPushTest({ userId: context.user.id, includeItemName: preferences.include_item_name });
+    if (!result.ok) return { ok: false, message: result.message };
+    return { ok: true, attempted: result.attempted, sent: result.sent };
+  } catch {
+    return reminderError("Could not send a test notification. Try again.");
+  }
 }

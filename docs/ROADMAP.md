@@ -80,6 +80,8 @@ Target users repeatedly save items into arbitrary nested locations and later ret
 
 **Phase 2.10B:** `20260908180000_add_buy_later_push_mutations.sql` is applied remotely. Explicit opt-in, a push-only service worker, browser PushManager registration, user-owned subscription persistence, timezone capture, privacy toggle, and user-level disable are implemented. Permission prompts only follow the Enable action. Scheduler-driven eligibility, VAPID private-key delivery, Supabase Cron, and delivery claims remain deferred.
 
+**Phase 2.10C Checkpoint 1 (local):** a server-only VAPID transport and a current-user manual test-send action are implemented. Tests exercise generic/private payload construction, all-active-subscription selection, expired-subscription cleanup, and safe responses. It is not a scheduler: due scanning, Cron, idempotency claims, and automatic sends remain deferred.
+
 ### Objective
 
 Make the promise **“I saved something I may want to buy, RX LifeOS remembers it, and helps me decide later”** useful without depending on universal automatic price tracking.

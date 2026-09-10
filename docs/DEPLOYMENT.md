@@ -34,14 +34,11 @@ BUY_LATER_REMINDER_ROLLOUT_DATE
 
 Use values from the selected Supabase project's Connect dialog where applicable. Despite the `NEXT_PUBLIC_` prefix, the publishable key is not authorization; authenticated sessions and RLS enforce access. The VAPID private key, Supabase service-role key, and scheduler secret are server-only and must never use the `NEXT_PUBLIC_` prefix. Set the rollout date to the date automatic reminders are first activated; it prevents an initial old-item reminder backlog.
 
-## Buy Later automatic reminder activation
+## Buy Later automatic reminder operations
 
-Checkpoint 2 requires a one-time, manual Supabase configuration after its migration has passed review and is applied:
+Buy Later reconsideration notifications are live in production. The deployed scheduler route is `POST /api/internal/buy-later/reminders/run`; Supabase Cron invokes it hourly at minute `:05` through `pg_net`. Vault holds the stable route URL and scheduler bearer secret.
 
-1. Enable the Supabase `pg_cron` and `pg_net` extensions in the Dashboard.
-2. Create Vault secrets named `buy_later_reminder_url` (the stable production URL ending in `/api/internal/buy-later/reminders/run`) and `buy_later_reminder_cron_secret` (the exact Vercel scheduler secret). Do not store either value in a repository migration.
-3. Schedule an hourly job, preferably five minutes after each hour, that calls `net.http_post` with `Content-Type: application/json` and `Authorization: Bearer <Vault secret>`. Read both values from `vault.decrypted_secrets` inside the job SQL.
-4. Confirm job status in Supabase Cron and only then run a controlled real-device due-item test.
+Required Supabase dependencies are Vault, `pg_cron`, and `pg_net`. Vault entries are named `buy_later_reminder_url` and `buy_later_reminder_cron_secret`; the latter must exactly match Vercel's server-only `BUY_LATER_REMINDER_CRON_SECRET`. Do not store either value in a repository migration or documentation.
 
 Use this placeholder-only job definition after both Vault values exist; it contains no application secret or deployment URL:
 
@@ -63,7 +60,14 @@ select cron.schedule(
 );
 ```
 
-The job has no user-controlled target or payload. The Vercel route is Node-only, accepts only the configured bearer secret, and returns aggregate counts without item names, endpoints, keys, UUIDs, or secret data. It processes at most 1,000 preference rows, three items per user, and 250 device pushes per invocation. It is intentionally hourly, honors each stored IANA timezone at or after 09:00 local, and uses durable database claims to suppress duplicate sends.
+The job has no user-controlled target or payload. The Vercel route is Node-only, accepts only the configured bearer secret, and returns aggregate counts without item names, endpoints, keys, UUIDs, or secret data. It processes at most 1,000 preference rows, three items per user, and 250 device pushes per invocation. It is intentionally hourly, honors each stored IANA timezone at or after 09:00 local, uses a rollout-date gate to avoid an old backlog, and uses durable database claims to suppress duplicate sends. Generic notification wording is default; item names require the user's explicit opt-in. Definitive 404/410 provider responses deactivate stale subscriptions; failed claimed deliveries have no automatic retry.
+
+### Safe operations
+
+- **Rotate the scheduler secret:** generate a new strong value outside the repository, update the Vercel Production `BUY_LATER_REMINDER_CRON_SECRET`, update the Vault `buy_later_reminder_cron_secret` to the exact same value, ensure the Vercel deployment using the new environment is Ready, then invoke or wait for Cron. Never print either value in SQL output, logs, or documentation.
+- **Change the rollout date:** update only Vercel's `BUY_LATER_REMINDER_ROLLOUT_DATE` to a valid calendar date and wait for a Ready deployment. Moving it earlier can make additional historical due items eligible; moving it later excludes earlier dates.
+- **Disable scheduling:** use the Supabase Cron dashboard to disable `buy-later-reminders-hourly`, or run `select cron.unschedule(jobid) from cron.job where jobname = 'buy-later-reminders-hourly';`. This stops future invocations without changing application data.
+- **Verify operations safely:** inspect the Cron dashboard/job status and aggregate route response or HTTP status. Do not query or display Vault decrypted values, subscription endpoints, capability keys, user IDs, or item names.
 
 Recommended scopes:
 
@@ -165,9 +169,9 @@ Database changes are independent of a Vercel rollback. Never assume rolling back
 
 ## Known limitations
 
-- Deployment has not yet been performed or smoke-tested on a real production domain.
+- Production deployment, installed-iPhone PWA Web Push, protected scheduler authorization, and one real automatic scheduler delivery have been validated.
 - The install icon uses the approved midnight and violet RX LifeOS identity.
-- There is no offline cache, background sync, custom install prompt, custom reminder time, email channel, retry queue, analytics, or notification digest.
+- There is no offline cache, background sync, custom install prompt, custom reminder time, email channel, retry queue, notification history UI, analytics, notification digest, or cross-device subscription-management UI. Multiple active subscriptions are intentionally independent delivery identities after reinstall/re-subscribe; definitive 404/410 subscriptions are deactivated automatically.
 - Preview sign-up confirmation returns to the Supabase project's Site URL rather than a changing preview domain.
 - A dedicated production Supabase project must still be created manually if environment separation is required.
 - The local-oriented pgTAP database suite remains unexecuted.

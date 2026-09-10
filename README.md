@@ -2,7 +2,7 @@
 
 **Your everyday operating system.**
 
-RX LifeOS is a modular quality-of-life application. **Find It** (including Phase 1.5 UX polish and Phase 1.6 deployment/PWA readiness) and the **Phase 2 Buy Later MVP** are operationally validated against the remote Supabase development project. Find It supports private location hierarchies and current-location recall; Buy Later supports deliberate purchase reconsideration and production-validated Share Intake. Both use Supabase Auth and PostgreSQL.
+RX LifeOS is a modular quality-of-life application. **Find It** (including Phase 1.5 UX polish and Phase 1.6 deployment/PWA readiness) and the **Phase 2 Buy Later MVP** are operationally validated against the remote Supabase development project. Find It supports private location hierarchies and current-location recall; Buy Later supports deliberate purchase reconsideration, production-validated Share Intake, and live Web Push reminders. Both use Supabase Auth and PostgreSQL.
 
 Current modules:
 
@@ -85,7 +85,7 @@ Phase 2 validation status:
 - **Production Share Intake validated:** Phase 2.6 authenticated URL intake, Phase 2.7 title-only metadata enrichment, and Phase 2.8 local URL-slug fallback work through `eMAG App → Apple Shortcut “Save To RX LifeOS” → /buy-later/import?url=... → review → explicit Save`.
 - **Notification opt-in (Phase 2.10B):** a push-only service worker, explicit permission flow, browser subscription persistence, timezone capture, privacy preference, and disable flow are implemented.
 - **Notification sender (Phase 2.10C Checkpoint 1):** an authenticated manual test notification uses the server-only VAPID sender and cleans up definitively expired subscriptions.
-- **Automatic reminders (Phase 2.10C Checkpoint 2):** a protected, hourly Supabase Cron-to-Vercel architecture atomically claims eligible per-device reminders, sends safe item deep links, and records sent, failed, or revoked outcomes. The claim migrations are remote-validated; scheduler-route deployment, Vault/Cron activation, and real-device automatic-delivery QA remain pending.
+- **Buy Later reconsideration notifications (Phase 2.10C):** live production Web Push includes explicit iPhone PWA opt-in, privacy preference, manual test delivery, an hourly `:05` Supabase Cron-to-Vercel scheduler, service-role atomic claims, safe item deep links, and sent/failed/revoked outcomes. Production validation covered scheduler authentication, remote claim permissions and idempotency, a real scheduler-to-iPhone delivery, and an immediate duplicate-free second invocation.
 - **Not yet executed:** the local-oriented [Buy Later pgTAP suite](supabase/tests/buy_later_rls.test.sql).
 
 The pgTAP suite targets a Supabase CLI local database with the current Supabase testing helpers, including the `tests` schema:
@@ -118,4 +118,4 @@ RX LifeOS is prepared for a default Next.js deployment on Vercel. Vercel and Sup
 
 The application publishes RX LifeOS metadata, a standalone web app manifest, 192px and 512px install icons, an Apple touch icon, and conservative mobile safe-area support. The install icon uses the approved midnight and violet RX monogram identity.
 
-RX LifeOS does not provide offline behavior, background synchronization, or a service worker. Installing it creates an app-like launcher for the HTTPS-hosted product; authenticated data continues to load from Supabase over the network.
+RX LifeOS provides no offline cache or background synchronization. Its narrow push-only service worker displays notification payloads and opens safe Buy Later deep links; it does not cache authenticated data. Installing it creates an app-like HTTPS-hosted experience; authenticated data continues to load from Supabase over the network.

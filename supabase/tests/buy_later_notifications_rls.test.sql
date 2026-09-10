@@ -1,6 +1,6 @@
 begin;
 
-select plan(12);
+select plan(14);
 
 select tests.rls_enabled('public', 'buy_later_notification_preferences');
 select tests.rls_enabled('public', 'buy_later_push_subscriptions');
@@ -10,6 +10,12 @@ select ok(
   and not has_table_privilege('anon', 'public.buy_later_push_subscriptions', 'select')
   and not has_table_privilege('anon', 'public.buy_later_reminder_deliveries', 'select'),
   'anonymous requests hold no notification-table read privileges'
+);
+select ok(
+  not has_function_privilege('anon', 'public.claim_buy_later_due_reminders(timestamp with time zone, date, integer, integer, integer)', 'execute')
+  and not has_function_privilege('authenticated', 'public.claim_buy_later_due_reminders(timestamp with time zone, date, integer, integer, integer)', 'execute')
+  and has_function_privilege('service_role', 'public.claim_buy_later_due_reminders(timestamp with time zone, date, integer, integer, integer)', 'execute'),
+  'only service_role can claim automatic reminder deliveries'
 );
 
 select tests.create_supabase_user('buy_later_notification_owner');
@@ -60,6 +66,10 @@ select is_empty(
 select is_empty(
   $$ delete from public.buy_later_push_subscriptions returning id $$,
   'another user cannot delete push subscriptions'
+);
+select throws_ok(
+  $$ select * from public.claim_buy_later_due_reminders(now(), current_date, 1, 1, 1) $$,
+  '42501', null, 'an authenticated user cannot invoke service-only reminder claims'
 );
 
 select tests.clear_authentication();

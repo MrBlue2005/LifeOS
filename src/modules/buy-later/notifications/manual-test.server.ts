@@ -1,19 +1,13 @@
 import { createSupabaseServiceClient } from "@/core/supabase/service.server";
-import { sendWebPush, webPushStatusCode, type WebPushPayload, type WebPushSubscription } from "@/core/notifications/web-push.server";
+import { sendWebPush, webPushStatusCode, type WebPushSubscription } from "@/core/notifications/web-push.server";
+import { createBuyLaterReminderPayload } from "./payload";
 
 const TEST_COOLDOWN_MS = 60_000;
 const lastTestSendByUser = new Map<string, number>();
 
 export type ManualPushTestResult = Readonly<{ ok: boolean; attempted: number; sent: number; message?: string }>;
 
-export function createBuyLaterTestPayload(includeItemName: boolean, item?: Readonly<{ id: string; name: string }>): WebPushPayload {
-  const validItem = item && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(item.id);
-  return {
-    title: "RX LifeOS",
-    body: includeItemName && validItem ? `Do you still want ${item.name}?` : "A Buy Later decision is ready.",
-    url: validItem ? `/buy-later/items/${item.id}` : "/buy-later",
-  };
-}
+export { createBuyLaterReminderPayload as createBuyLaterTestPayload } from "./payload";
 
 function isWithinCooldown(userId: string, now: number): boolean {
   const previous = lastTestSendByUser.get(userId);
@@ -29,7 +23,7 @@ export async function sendBuyLaterManualPushTest(input: Readonly<{ userId: strin
   if (error) return { ok: false, attempted: 0, sent: 0, message: "Could not prepare a test notification." };
   if (!subscriptions.length) return { ok: false, attempted: 0, sent: 0, message: "No active reminder subscription was found." };
   lastTestSendByUser.set(input.userId, now);
-  const payload = createBuyLaterTestPayload(input.includeItemName);
+  const payload = createBuyLaterReminderPayload(input.includeItemName);
   let sent = 0;
   for (const subscription of subscriptions as WebPushSubscription[]) {
     try { await sendWebPush(subscription, payload); sent += 1; }

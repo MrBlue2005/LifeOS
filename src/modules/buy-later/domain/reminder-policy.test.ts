@@ -5,6 +5,7 @@ import {
   defaultBuyLaterNotificationPreferences,
   hasReachedBuyLaterReminderHour,
   isEligibleForBuyLaterReminder,
+  isEligibleForScheduledBuyLaterReminder,
   isValidIanaTimeZone,
 } from "./reminder-policy";
 
@@ -38,5 +39,32 @@ describe("Buy Later reminder policy", () => {
     expect(isEligibleForBuyLaterReminder({ status: "considering", reconsiderAt: "2026-09-15" }, "2026-09-15", false)).toBe(false);
     expect(isEligibleForBuyLaterReminder({ status: "purchased", reconsiderAt: "2026-09-14" }, "2026-09-15", true)).toBe(false);
     expect(isEligibleForBuyLaterReminder({ status: "dismissed", reconsiderAt: "2026-09-14" }, "2026-09-15", true)).toBe(false);
+  });
+
+  it("requires enabled preferences, a valid timezone, an active subscription, and a post-rollout due date", () => {
+    const now = new Date("2026-09-15T06:00:00.000Z");
+    const eligible = {
+      pushEnabled: true, timezone: "Europe/Bucharest", activeSubscriptionCount: 1,
+      item: { status: "considering" as const, reconsiderAt: "2026-09-15" }, rolloutDate: "2026-09-15",
+    };
+    expect(isEligibleForScheduledBuyLaterReminder(eligible, now)).toBe(true);
+    expect(isEligibleForScheduledBuyLaterReminder({ ...eligible, activeSubscriptionCount: 0 }, now)).toBe(false);
+    expect(isEligibleForScheduledBuyLaterReminder({ ...eligible, pushEnabled: false }, now)).toBe(false);
+    expect(isEligibleForScheduledBuyLaterReminder({ ...eligible, timezone: "Not/AZone" }, now)).toBe(false);
+    expect(isEligibleForScheduledBuyLaterReminder({ ...eligible, item: { status: "considering", reconsiderAt: "2026-09-14" } }, now)).toBe(false);
+    expect(isEligibleForScheduledBuyLaterReminder({ ...eligible, item: { status: "purchased", reconsiderAt: "2026-09-15" } }, now)).toBe(false);
+    expect(isEligibleForScheduledBuyLaterReminder({ ...eligible, item: { status: "dismissed", reconsiderAt: "2026-09-15" } }, now)).toBe(false);
+    expect(isEligibleForScheduledBuyLaterReminder({ ...eligible, item: { status: "considering", reconsiderAt: "2026-09-16" } }, now)).toBe(false);
+  });
+
+  it("keeps the 09:00 policy correct across Bucharest daylight-saving time", () => {
+    expect(isEligibleForScheduledBuyLaterReminder({
+      pushEnabled: true, timezone: "Europe/Bucharest", activeSubscriptionCount: 1,
+      item: { status: "considering", reconsiderAt: "2026-03-29" }, rolloutDate: "2026-03-29",
+    }, new Date("2026-03-29T05:59:00.000Z"))).toBe(false);
+    expect(isEligibleForScheduledBuyLaterReminder({
+      pushEnabled: true, timezone: "Europe/Bucharest", activeSubscriptionCount: 1,
+      item: { status: "considering", reconsiderAt: "2026-03-29" }, rolloutDate: "2026-03-29",
+    }, new Date("2026-03-29T06:00:00.000Z"))).toBe(true);
   });
 });

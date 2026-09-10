@@ -2,7 +2,7 @@
 
 ## Deployment shape
 
-RX LifeOS deploys as one Next.js application on Vercel. It uses Supabase Auth and PostgreSQL through the existing server-side, cookie-based clients. Authenticated requests use the Supabase publishable key and remain constrained by Row Level Security; the application does not require or accept a service-role key.
+RX LifeOS deploys as one Next.js application on Vercel. It uses Supabase Auth and PostgreSQL through the existing server-side, cookie-based clients. Authenticated requests use the Supabase publishable key and remain constrained by Row Level Security. The automatic Buy Later scheduler alone uses a server-only service-role key for its narrow claim and delivery boundary; it is never accepted from a client request or exposed to client code.
 
 Vercel's normal Next.js defaults are sufficient. Do not add a custom output directory, custom server, Docker image, or `vercel.json` unless a future requirement demonstrates a need.
 
@@ -18,14 +18,52 @@ The recommended environment split is:
 
 A private personal deployment may temporarily use the existing development project. This mixes preview/development and production identities and data, so it should be an explicit temporary choice rather than the long-term production arrangement.
 
-Configure these variables in Vercel Project Settings. They are the only application environment variables currently required:
+Configure these variables in Vercel Project Settings:
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+NEXT_PUBLIC_WEB_PUSH_VAPID_PUBLIC_KEY
+WEB_PUSH_VAPID_PUBLIC_KEY
+WEB_PUSH_VAPID_PRIVATE_KEY
+WEB_PUSH_VAPID_SUBJECT
+SUPABASE_SERVICE_ROLE_KEY
+BUY_LATER_REMINDER_CRON_SECRET
+BUY_LATER_REMINDER_ROLLOUT_DATE
 ```
 
-Use values from the selected Supabase project's Connect dialog. Despite the `NEXT_PUBLIC_` prefix, the publishable key is not authorization; authenticated sessions and RLS enforce access. Never configure a service-role key in this application.
+Use values from the selected Supabase project's Connect dialog where applicable. Despite the `NEXT_PUBLIC_` prefix, the publishable key is not authorization; authenticated sessions and RLS enforce access. The VAPID private key, Supabase service-role key, and scheduler secret are server-only and must never use the `NEXT_PUBLIC_` prefix. Set the rollout date to the date automatic reminders are first activated; it prevents an initial old-item reminder backlog.
+
+## Buy Later automatic reminder activation
+
+Checkpoint 2 requires a one-time, manual Supabase configuration after its migration has passed review and is applied:
+
+1. Enable the Supabase `pg_cron` and `pg_net` extensions in the Dashboard.
+2. Create Vault secrets named `buy_later_reminder_url` (the stable production URL ending in `/api/internal/buy-later/reminders/run`) and `buy_later_reminder_cron_secret` (the exact Vercel scheduler secret). Do not store either value in a repository migration.
+3. Schedule an hourly job, preferably five minutes after each hour, that calls `net.http_post` with `Content-Type: application/json` and `Authorization: Bearer <Vault secret>`. Read both values from `vault.decrypted_secrets` inside the job SQL.
+4. Confirm job status in Supabase Cron and only then run a controlled real-device due-item test.
+
+Use this placeholder-only job definition after both Vault values exist; it contains no application secret or deployment URL:
+
+```sql
+select cron.schedule(
+  'buy-later-reminders-hourly',
+  '5 * * * *',
+  $$
+    select net.http_post(
+      url := (select decrypted_secret from vault.decrypted_secrets where name = 'buy_later_reminder_url'),
+      headers := jsonb_build_object(
+        'Content-Type', 'application/json',
+        'Authorization', 'Bearer ' || (select decrypted_secret from vault.decrypted_secrets where name = 'buy_later_reminder_cron_secret')
+      ),
+      body := '{}'::jsonb,
+      timeout_milliseconds := 10000
+    );
+  $$
+);
+```
+
+The job has no user-controlled target or payload. The Vercel route is Node-only, accepts only the configured bearer secret, and returns aggregate counts without item names, endpoints, keys, UUIDs, or secret data. It processes at most 1,000 preference rows, three items per user, and 250 device pushes per invocation. It is intentionally hourly, honors each stored IANA timezone at or after 09:00 local, and uses durable database claims to suppress duplicate sends.
 
 Recommended scopes:
 
@@ -129,7 +167,7 @@ Database changes are independent of a Vercel rollback. Never assume rolling back
 
 - Deployment has not yet been performed or smoke-tested on a real production domain.
 - The install icon uses the approved midnight and violet RX LifeOS identity.
-- There is no offline cache, background sync, push notification support, or custom install prompt.
+- There is no offline cache, background sync, custom install prompt, custom reminder time, email channel, retry queue, analytics, or notification digest.
 - Preview sign-up confirmation returns to the Supabase project's Site URL rather than a changing preview domain.
 - A dedicated production Supabase project must still be created manually if environment separation is required.
 - The local-oriented pgTAP database suite remains unexecuted.

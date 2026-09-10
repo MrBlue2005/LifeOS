@@ -259,6 +259,27 @@ export type Database = {
     };
     Views: Record<never, never>;
     Functions: {
+      claim_buy_later_due_reminders: {
+        Args: {
+          run_at: string;
+          rollout_date: string;
+          max_users: number;
+          max_items_per_user: number;
+          max_pushes: number;
+        };
+        Returns: {
+          delivery_id: string;
+          user_id: string;
+          item_id: string;
+          item_name: string;
+          reconsider_at: string;
+          subscription_id: string;
+          endpoint: string;
+          p256dh: string;
+          auth: string;
+          include_item_name: boolean;
+        }[];
+      };
       disable_buy_later_push_reminders: {
         Args: { subscription_endpoint?: string | null };
         Returns: undefined;

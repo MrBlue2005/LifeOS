@@ -17,5 +17,6 @@ describe("Buy Later push worker contract", () => {
     expect(worker).toContain("typeof value.url === \"string\"");
     expect(worker).toContain("safeText(payload?.body");
     expect(worker).toContain("new URL(client.url).origin === self.location.origin");
+    expect(worker).toContain("existing.navigate(path)");
   });
 });

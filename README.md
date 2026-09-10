@@ -30,7 +30,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 ```
 
-These values identify the public Data API client; authorization is enforced by authenticated sessions and Row Level Security. No service-role key is used by the application.
+These values identify the public Data API client; authorization is enforced by authenticated sessions and Row Level Security. The automatic reminder scheduler alone uses a server-only service-role key for its narrow delivery boundary; it is never exposed to client code.
 
 3. Apply the ordered migrations in [`supabase/migrations`](supabase/migrations). With the Supabase CLI:
 
@@ -79,12 +79,13 @@ Phase 1 validation status:
 
 Phase 2 validation status:
 
-- **Migration synchronized through Phase 2.10B:** `20260907170000_create_buy_later.sql`, `20260908170000_create_buy_later_notifications.sql`, and `20260908180000_add_buy_later_push_mutations.sql` are applied to the linked remote Supabase development project.
+- **Migrations synchronized through Phase 2.10C Checkpoint 2:** `20260907170000_create_buy_later.sql`, `20260908170000_create_buy_later_notifications.sql`, `20260908180000_add_buy_later_push_mutations.sql`, `20260910170000_add_buy_later_reminder_claims.sql`, `20260910180000_fix_buy_later_reminder_claim_ambiguity.sql`, and `20260910190000_fix_buy_later_reminder_conflict_target.sql` are applied to the linked remote Supabase development project. The claim RPC passed remote service-role, idempotency, ineligibility, and access-boundary validation.
 - **Manually validated:** manual item saving, optional URL/price/currency/note, Waiting and Due states, rescheduling through “I still want it,” Purchased, Dismissed, History, separate permanent deletion, and cross-user isolation through RLS.
 - **Real-device validated:** reconsideration presets and the custom date control work on an iPhone over the allowed LAN development origin.
 - **Production Share Intake validated:** Phase 2.6 authenticated URL intake, Phase 2.7 title-only metadata enrichment, and Phase 2.8 local URL-slug fallback work through `eMAG App → Apple Shortcut “Save To RX LifeOS” → /buy-later/import?url=... → review → explicit Save`.
-- **Notification opt-in (Phase 2.10B):** a push-only service worker, explicit permission flow, browser subscription persistence, timezone capture, privacy preference, and disable flow are implemented. Scheduled detection and automatic delivery are not implemented.
-- **Notification sender (local Phase 2.10C Checkpoint 1):** an authenticated manual test notification can use the server-only VAPID sender and cleans up definitively expired subscriptions. No scheduler or automatic reminder delivery exists.
+- **Notification opt-in (Phase 2.10B):** a push-only service worker, explicit permission flow, browser subscription persistence, timezone capture, privacy preference, and disable flow are implemented.
+- **Notification sender (Phase 2.10C Checkpoint 1):** an authenticated manual test notification uses the server-only VAPID sender and cleans up definitively expired subscriptions.
+- **Automatic reminders (Phase 2.10C Checkpoint 2):** a protected, hourly Supabase Cron-to-Vercel architecture atomically claims eligible per-device reminders, sends safe item deep links, and records sent, failed, or revoked outcomes. The claim migrations are remote-validated; scheduler-route deployment, Vault/Cron activation, and real-device automatic-delivery QA remain pending.
 - **Not yet executed:** the local-oriented [Buy Later pgTAP suite](supabase/tests/buy_later_rls.test.sql).
 
 The pgTAP suite targets a Supabase CLI local database with the current Supabase testing helpers, including the `tests` schema:

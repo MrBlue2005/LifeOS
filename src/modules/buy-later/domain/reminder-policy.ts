@@ -47,3 +47,19 @@ export function isEligibleForBuyLaterReminder(
 ): boolean {
   return item.status === "considering" && item.reconsiderAt <= localDate && hasReachedReminderHour;
 }
+
+export function isEligibleForScheduledBuyLaterReminder(
+  input: Readonly<{
+    pushEnabled: boolean;
+    timezone: string | null;
+    activeSubscriptionCount: number;
+    item: { status: BuyLaterStatus; reconsiderAt: string };
+    rolloutDate: string;
+  }>,
+  now = new Date(),
+): boolean {
+  if (!input.pushEnabled || !input.timezone || !isValidIanaTimeZone(input.timezone) || input.activeSubscriptionCount < 1) return false;
+  const localDate = calendarDateInTimeZone(input.timezone, now);
+  return input.item.reconsiderAt >= input.rolloutDate
+    && isEligibleForBuyLaterReminder(input.item, localDate, hasReachedBuyLaterReminderHour(input.timezone, now));
+}

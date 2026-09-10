@@ -1,8 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  MAX_ALIASES_PER_ITEM,
+  MAX_ALIAS_LENGTH,
+  normalizeFindItAlias,
+  normalizeFindItAliasDisplay,
   normalizeSearchQuery,
   toIlikeContainsPattern,
+  validateFindItAlias,
   validateItemInput,
   validateLocationInput,
 } from "./validation";
@@ -46,5 +51,23 @@ describe("Find It validation", () => {
       "car registration",
     );
     expect(toIlikeContainsPattern("50%_off")).toBe("%50\\%\\_off%");
+  });
+
+  it("normalizes aliases without changing their meaningful display characters", () => {
+    expect(normalizeFindItAliasDisplay("  Emergency   light's—case  ")).toBe("Emergency light's—case");
+    expect(normalizeFindItAlias("  Lantern  ")).toBe("lantern");
+    expect(normalizeFindItAliasDisplay("Șurub")).toBe("Șurub");
+    expect(normalizeFindItAlias("șurub")).not.toBe(normalizeFindItAlias("surub"));
+  });
+
+  it("validates alias limits and rejects canonical-name equivalents", () => {
+    expect(MAX_ALIASES_PER_ITEM).toBe(12);
+    expect(validateFindItAlias("  Torch  ", "Flashlight")).toEqual({
+      success: true,
+      data: { alias: "Torch", normalizedAlias: "torch" },
+    });
+    expect(validateFindItAlias("   ").success).toBe(false);
+    expect(validateFindItAlias("a".repeat(MAX_ALIAS_LENGTH + 1)).success).toBe(false);
+    expect(validateFindItAlias("FLASHLIGHT", " flashlight ").success).toBe(false);
   });
 });

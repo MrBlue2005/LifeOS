@@ -221,6 +221,44 @@ export type Database = {
           },
         ];
       };
+      find_it_item_aliases: {
+        Row: {
+          alias: string;
+          created_at: string;
+          id: string;
+          item_id: string;
+          normalized_alias: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          alias: string;
+          created_at?: string;
+          id?: string;
+          item_id: string;
+          normalized_alias?: never;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Update: {
+          alias?: string;
+          created_at?: string;
+          id?: string;
+          item_id?: string;
+          normalized_alias?: never;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "find_it_item_aliases_user_item_fkey";
+            columns: ["user_id", "item_id"];
+            isOneToOne: false;
+            referencedRelation: "find_it_items";
+            referencedColumns: ["user_id", "id"];
+          },
+        ];
+      };
       find_it_locations: {
         Row: {
           created_at: string;

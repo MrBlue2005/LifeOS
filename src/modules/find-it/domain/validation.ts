@@ -21,6 +21,14 @@ export type ItemInput = Readonly<{
   locationId: string;
 }>;
 
+export const MAX_ALIASES_PER_ITEM = 12;
+export const MAX_ALIAS_LENGTH = 60;
+
+export type FindItAliasInput = Readonly<{
+  alias: string;
+  normalizedAlias: string;
+}>;
+
 function readText(formData: FormData, name: string): string {
   const value = formData.get(name);
   return typeof value === "string" ? value.trim() : "";
@@ -108,4 +116,43 @@ export function normalizeSearchQuery(value: string | null | undefined): string {
 export function toIlikeContainsPattern(value: string): string {
   const escaped = value.replace(/[\\%_]/g, "\\$&");
   return `%${escaped}%`;
+}
+
+export function normalizeFindItAliasDisplay(value: string): string {
+  return value.normalize("NFC").trim().replace(/\s+/gu, " ");
+}
+
+export function normalizeFindItAlias(value: string): string {
+  return normalizeFindItAliasDisplay(value).toLowerCase();
+}
+
+export function validateFindItAlias(
+  value: string,
+  canonicalItemName?: string,
+): ValidationResult<FindItAliasInput> {
+  const alias = normalizeFindItAliasDisplay(value);
+  const normalizedAlias = normalizeFindItAlias(alias);
+  const values = { alias };
+
+  if (!alias) {
+    return { success: false, message: "Alias is required.", values };
+  }
+
+  if (alias.length > MAX_ALIAS_LENGTH) {
+    return {
+      success: false,
+      message: `Alias must be ${MAX_ALIAS_LENGTH} characters or fewer.`,
+      values,
+    };
+  }
+
+  if (canonicalItemName && normalizedAlias === normalizeFindItAlias(canonicalItemName)) {
+    return {
+      success: false,
+      message: "An alias must be different from the item name.",
+      values,
+    };
+  }
+
+  return { success: true, data: { alias, normalizedAlias } };
 }

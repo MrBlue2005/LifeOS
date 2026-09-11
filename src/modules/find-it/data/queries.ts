@@ -1,9 +1,20 @@
 import { createSupabaseServerClient } from "@/core/supabase/server";
-import { toIlikeContainsPattern } from "../domain/validation";
+import {
+  normalizeFindItAlias,
+  toIlikeContainsPattern,
+} from "../domain/validation";
+import {
+  FIND_IT_SEARCH_RESULT_LIMIT,
+  mergeFindItSearchResults,
+  type FindItAliasSearchRow,
+} from "./search-results";
 import type {
   FindItItem,
+  FindItItemSearchResult,
   FindItLocation,
 } from "../types";
+
+const itemSelect = "id,user_id,name,description,location_id,created_at,updated_at";
 
 function mapLocation(row: {
   id: string;
@@ -65,7 +76,7 @@ export async function listItems(
   const supabase = await createSupabaseServerClient();
   let request = supabase
     .from("find_it_items")
-    .select("id,user_id,name,description,location_id,created_at,updated_at")
+    .select(itemSelect)
     .eq("user_id", userId)
     .order("updated_at", { ascending: false });
 
@@ -82,6 +93,66 @@ export async function listItems(
   return data.map(mapItem);
 }
 
+export async function searchItems(
+  userId: string,
+  canonicalQuery: string,
+): Promise<readonly FindItItemSearchResult[]> {
+  const supabase = await createSupabaseServerClient();
+  const aliasQuery = normalizeFindItAlias(canonicalQuery);
+  const canonicalPattern = toIlikeContainsPattern(canonicalQuery);
+  const aliasPattern = toIlikeContainsPattern(aliasQuery);
+
+  const [canonicalResponse, aliasResponse] = await Promise.all([
+    supabase
+      .from("find_it_items")
+      .select(itemSelect)
+      .eq("user_id", userId)
+      .ilike("name", canonicalPattern)
+      .order("updated_at", { ascending: false })
+      .order("id", { ascending: true })
+      .limit(FIND_IT_SEARCH_RESULT_LIMIT),
+    supabase
+      .from("find_it_item_aliases")
+      .select("id,item_id,alias,normalized_alias")
+      .eq("user_id", userId)
+      .ilike("normalized_alias", aliasPattern)
+      .order("normalized_alias", { ascending: true })
+      .order("id", { ascending: true }),
+  ]);
+
+  if (canonicalResponse.error || aliasResponse.error) {
+    throw new Error("Could not search items.");
+  }
+
+  const aliasRows: FindItAliasSearchRow[] = aliasResponse.data.map((row) => ({
+    itemId: row.item_id,
+    alias: row.alias,
+    normalizedAlias: row.normalized_alias,
+  }));
+  const aliasItemIds = [...new Set(aliasRows.map((row) => row.itemId))];
+  let aliasItems: FindItItem[] = [];
+
+  if (aliasItemIds.length) {
+    const { data, error } = await supabase
+      .from("find_it_items")
+      .select(itemSelect)
+      .eq("user_id", userId)
+      .in("id", aliasItemIds);
+
+    if (error) {
+      throw new Error("Could not load alias-matched items.");
+    }
+
+    aliasItems = data.map(mapItem);
+  }
+
+  return mergeFindItSearchResults(
+    canonicalResponse.data.map(mapItem),
+    aliasRows,
+    aliasItems,
+  );
+}
+
 export async function getItemById(
   userId: string,
   itemId: string,
@@ -89,7 +160,7 @@ export async function getItemById(
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("find_it_items")
-    .select("id,user_id,name,description,location_id,created_at,updated_at")
+    .select(itemSelect)
     .eq("user_id", userId)
     .eq("id", itemId)
     .maybeSingle();

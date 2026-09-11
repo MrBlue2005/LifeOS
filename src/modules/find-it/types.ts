@@ -28,6 +28,15 @@ export type FindItItemResult = Readonly<{
   locationPath: readonly string[];
 }>;
 
+export type FindItItemMatch =
+  | Readonly<{ kind: "canonical" }>
+  | Readonly<{ kind: "alias"; matchedAlias: string }>;
+
+export type FindItItemSearchResult = Readonly<{
+  item: FindItItem;
+  match: FindItItemMatch;
+}>;
+
 export type FindItActionState = Readonly<{
   status: "idle" | "error";
   message: string;

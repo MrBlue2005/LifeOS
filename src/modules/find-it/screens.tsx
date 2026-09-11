@@ -17,6 +17,7 @@ import {
   getItemById,
   listItems,
   listLocations,
+  searchItems,
 } from "./data/queries";
 import {
   buildLocationTree,
@@ -54,11 +55,15 @@ export async function FindItHomeScreen({
   notice,
 }: Readonly<{ userId: string; rawQuery?: string; notice?: string }>) {
   const query = normalizeSearchQuery(rawQuery);
-  const [items, locations] = await Promise.all([
-    listItems(userId, query),
+  const [searchResults, locations] = await Promise.all([
+    query
+      ? searchItems(userId, query)
+      : listItems(userId).then((items) =>
+          items.map((item) => ({ item, match: { kind: "canonical" as const } })),
+        ),
     listLocations(userId),
   ]);
-  const results = items.map((item) => ({
+  const results = searchResults.map(({ item }) => ({
     item,
     locationPath: getLocationPath(item.locationId, locations),
   }));

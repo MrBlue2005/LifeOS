@@ -7,12 +7,14 @@ const queryMocks = vi.hoisted(() => ({
   getItemById: vi.fn(),
   listItems: vi.fn(),
   listLocations: vi.fn(),
+  searchItems: vi.fn(),
 }));
 
 vi.mock("./data/queries", () => ({
   getItemById: queryMocks.getItemById,
   listItems: queryMocks.listItems,
   listLocations: queryMocks.listLocations,
+  searchItems: queryMocks.searchItems,
 }));
 
 import {
@@ -46,6 +48,7 @@ describe("FindItHomeScreen", () => {
     queryMocks.getItemById.mockReset();
     queryMocks.listItems.mockReset();
     queryMocks.listLocations.mockReset();
+    queryMocks.searchItems.mockReset();
   });
 
   it("centers the first-run experience on search and location setup", async () => {
@@ -60,6 +63,7 @@ describe("FindItHomeScreen", () => {
     expect(html).toContain("Search your saved items");
     expect(html).toContain("Create your first location");
     expect(html).not.toContain("href=\"/find-it/items/new\"");
+    expect(queryMocks.searchItems).not.toHaveBeenCalled();
   });
 
   it("shows primary actions and complete paths for saved items", async () => {
@@ -77,7 +81,7 @@ describe("FindItHomeScreen", () => {
   });
 
   it("keeps deterministic query and clear-search behavior visible", async () => {
-    queryMocks.listItems.mockResolvedValue([]);
+    queryMocks.searchItems.mockResolvedValue([]);
     queryMocks.listLocations.mockResolvedValue([location]);
 
     const html = renderToStaticMarkup(
@@ -87,9 +91,31 @@ describe("FindItHomeScreen", () => {
       }),
     );
 
-    expect(queryMocks.listItems).toHaveBeenCalledWith(location.userId, "passport");
+    expect(queryMocks.searchItems).toHaveBeenCalledWith(location.userId, "passport");
     expect(html).toContain("Results for “passport”");
     expect(html).toContain("Clear search");
+  });
+
+  it("keeps an alias-matched item's current location path in search results", async () => {
+    const movedLocation: FindItLocation = {
+      ...location,
+      id: "10000000-0000-4000-8000-000000000002",
+      name: "Hall closet",
+      parentId: location.id,
+    };
+    const movedItem = { ...item, locationId: movedLocation.id };
+    queryMocks.searchItems.mockResolvedValue([
+      { item: movedItem, match: { kind: "alias", matchedAlias: "Travel document" } },
+    ]);
+    queryMocks.listLocations.mockResolvedValue([location, movedLocation]);
+
+    const html = renderToStaticMarkup(
+      await FindItHomeScreen({ userId: location.userId, rawQuery: "travel" }),
+    );
+
+    expect(html).toContain("Passport");
+    expect(html).toContain("Top Drawer");
+    expect(html).toContain("Hall closet");
   });
 });
 

@@ -51,6 +51,8 @@ describe("Find It validation", () => {
       "car registration",
     );
     expect(toIlikeContainsPattern("50%_off")).toBe("%50\\%\\_off%");
+    expect(toIlikeContainsPattern("torch\\case")).toBe("%torch\\\\case%");
+    expect(toIlikeContainsPattern("light's case")).toBe("%light's case%");
   });
 
   it("normalizes aliases without changing their meaningful display characters", () => {
@@ -58,6 +60,8 @@ describe("Find It validation", () => {
     expect(normalizeFindItAlias("  Lantern  ")).toBe("lantern");
     expect(normalizeFindItAliasDisplay("Șurub")).toBe("Șurub");
     expect(normalizeFindItAlias("șurub")).not.toBe(normalizeFindItAlias("surub"));
+    expect(normalizeFindItAlias("  Șurub  ")).toBe("șurub");
+    expect(toIlikeContainsPattern(normalizeFindItAlias("  Șurub  "))).toBe("%șurub%");
   });
 
   it("validates alias limits and rejects canonical-name equivalents", () => {

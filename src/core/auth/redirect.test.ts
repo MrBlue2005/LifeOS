@@ -9,9 +9,12 @@ describe("getSafeRedirectPath", () => {
     );
   });
 
-  it("rejects external and protocol-relative redirects", () => {
+  it("rejects external, protocol, and malformed redirects", () => {
     expect(getSafeRedirectPath("https://example.com")).toBe("/find-it");
+    expect(getSafeRedirectPath("http://example.com")).toBe("/find-it");
     expect(getSafeRedirectPath("//example.com")).toBe("/find-it");
+    expect(getSafeRedirectPath("javascript:alert(1)")).toBe("/find-it");
+    expect(getSafeRedirectPath("data:text/html,test")).toBe("/find-it");
     expect(getSafeRedirectPath("/\\example.com")).toBe("/find-it");
     expect(getSafeRedirectPath("/find-it\nSet-Cookie: bad=1")).toBe("/find-it");
   });

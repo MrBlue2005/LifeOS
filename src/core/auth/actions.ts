@@ -103,7 +103,10 @@ export async function signUpAction(
   }
 
   if (data.session) {
-    redirect("/find-it");
+    const nextValue = formData.get("next");
+    redirect(
+      getSafeRedirectPath(typeof nextValue === "string" ? nextValue : null),
+    );
   }
 
   return {

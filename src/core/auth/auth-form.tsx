@@ -15,6 +15,10 @@ type AuthFormProps = Readonly<{
   nextPath?: string;
 }>;
 
+function authPath(path: "/auth/sign-in" | "/auth/sign-up", nextPath?: string) {
+  return nextPath ? `${path}?next=${encodeURIComponent(nextPath)}` : path;
+}
+
 function SubmitButton({ label }: Readonly<{ label: string }>) {
   const { pending } = useFormStatus();
 
@@ -73,7 +77,12 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
 
       <p className="form-switch">
         {isSignIn ? "New to RX LifeOS?" : "Already have an account?"}{" "}
-        <Link href={isSignIn ? "/auth/sign-up" : "/auth/sign-in"}>
+        <Link
+          href={authPath(
+            isSignIn ? "/auth/sign-up" : "/auth/sign-in",
+            nextPath,
+          )}
+        >
           {isSignIn ? "Create an account" : "Sign in"}
         </Link>
       </p>

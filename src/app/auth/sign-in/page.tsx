@@ -25,11 +25,11 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   }
 
   const params = await searchParams;
-  const nextPath = getSafeRedirectPath(params.next);
+  const nextPath = params.next ? getSafeRedirectPath(params.next) : undefined;
   const user = await getAuthenticatedUser();
 
   if (user) {
-    redirect(nextPath);
+    redirect(nextPath ?? "/find-it");
   }
 
   return (

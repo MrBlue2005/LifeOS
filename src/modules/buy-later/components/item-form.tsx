@@ -21,7 +21,7 @@ export function BuyLaterItemForm({ item, today, initialValues }: Readonly<{ item
   const [reconsiderAt, setReconsiderAt] = useState(initialDate);
 
   return (
-    <form className="buy-later-form" action={formAction}>
+    <form className="buy-later-form" action={formAction} noValidate>
       {item ? <input name="itemId" type="hidden" value={item.id} /> : null}
       <label className="field buy-later-name-field">
         <span>What is it?</span>
@@ -31,8 +31,8 @@ export function BuyLaterItemForm({ item, today, initialValues }: Readonly<{ item
 
       <label className="field">
         <span>Product link <small>Optional</small></span>
-        <input aria-describedby={state.fields.productUrl ? "buy-url-error" : "buy-url-hint"} aria-invalid={Boolean(state.fields.productUrl)} autoCapitalize="none" autoComplete="url" defaultValue={state.values.productUrl ?? item?.productUrl ?? initialValues?.productUrl ?? ""} inputMode="url" maxLength={2048} name="productUrl" placeholder="https://store.example/product" />
-        <span className="form-hint" id="buy-url-hint">Saved as a reference only. RX LifeOS will not fetch it.</span>
+        <input aria-describedby={state.fields.productUrl ? "buy-url-error" : "buy-url-hint"} aria-invalid={Boolean(state.fields.productUrl)} autoCapitalize="none" autoComplete="url" defaultValue={state.values.productUrl ?? item?.productUrl ?? initialValues?.productUrl ?? ""} inputMode="url" maxLength={2048} name="productUrl" placeholder="https://store.example/product" type="url" />
+        <span className="form-hint" id="buy-url-hint">Product links are optional. RX LifeOS does not monitor them or track prices.</span>
         <FieldError id="buy-url-error" message={state.fields.productUrl} />
       </label>
 

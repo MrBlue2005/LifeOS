@@ -98,6 +98,10 @@ describe("Buy Later screens", () => {
     expect(html).toContain('value="https://example.com/product"');
     expect(html).toContain('name="note"');
     expect(html).toContain("For the reading corner");
+    expect(html).toContain('name="productUrl"');
+    expect(html).toContain('type="url"');
+    expect(html).toContain("Product links are optional. RX LifeOS does not monitor them or track prices.");
+    expect(html).not.toContain("RX LifeOS will not fetch it.");
     expect(html).toContain("Save for later");
     expect(html).not.toContain("Saved for later.");
   });
@@ -106,6 +110,10 @@ describe("Buy Later screens", () => {
     const html = renderToStaticMarkup(<NewBuyLaterItemScreen />);
     expect(html).toContain("Save it for later");
     expect(html).toContain('name="name"');
+    expect(html).toContain('name="productUrl"');
+    expect(html).toContain('type="url"');
+    expect(html).toContain("Product links are optional. RX LifeOS does not monitor them or track prices.");
+    expect(html).toContain("noValidate");
     expect(html).not.toContain('value="Desk lamp"');
     expect(html).not.toContain('value="https://example.com/product"');
   });

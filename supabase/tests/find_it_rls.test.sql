@@ -1,6 +1,6 @@
 begin;
 
-select plan(39);
+select plan(40);
 
 select tests.rls_enabled('public', 'find_it_locations');
 select tests.rls_enabled('public', 'find_it_items');
@@ -28,6 +28,16 @@ select ok(
   and not has_table_privilege('anon', 'public.find_it_item_aliases', 'update')
   and not has_table_privilege('anon', 'public.find_it_item_aliases', 'delete'),
   'anonymous requests hold no item alias table privileges'
+);
+
+select ok(
+  has_function_privilege('authenticated', 'public.normalize_find_it_alias_display(text)', 'execute')
+  and has_function_privilege('authenticated', 'public.normalize_find_it_alias(text)', 'execute')
+  and not has_function_privilege('public', 'public.normalize_find_it_alias_display(text)', 'execute')
+  and not has_function_privilege('public', 'public.normalize_find_it_alias(text)', 'execute')
+  and not has_function_privilege('anon', 'public.normalize_find_it_alias_display(text)', 'execute')
+  and not has_function_privilege('anon', 'public.normalize_find_it_alias(text)', 'execute'),
+  'only authenticated users can execute alias normalization helpers'
 );
 
 select tests.create_supabase_user('find_it_owner');

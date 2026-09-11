@@ -46,6 +46,8 @@ The essential promise is: **“I saved where something is, and later RX LifeOS h
 
 Find It is the first implementation priority because it establishes the Core ownership model, hierarchical data, search, and most important product habit without relying on expensive automation.
 
+Find It Alias-Aware Recall is complete and production validated. Item Edit supports owner-managed alias add/remove; deterministic partial search ranks canonical matches before alias-only matches, preserves the current full location path, and explains only the alias that matched. Normalization V1 preserves punctuation and Romanian diacritics rather than transliterating or unaccenting them. Aliases during initial item creation, alias editing-in-place, automatic alias suggestions, fuzzy/semantic search, AI-generated aliases, tags, and categories remain deferred.
+
 ### Buy Later
 
 Buy Later collects purchase intentions that otherwise remain scattered among bookmarks, tabs, screenshots, messages, notes, email, and store wishlists. The MVP stores a product name, optional URL, optional current price and currency, optional note, date added, and a user-selected reconsideration date.

@@ -37,7 +37,7 @@ Priority labels:
 
 ## Find It MVP — first implementation priority
 
-**Implementation and validation status:** The Phase 1 code implements the MUST HAVE save/find/edit loop with user-only ownership, email/password Supabase Auth, current placement only, case-insensitive partial name search, generic hierarchical locations, blocked non-empty location deletion, and explicit item hard-delete. Phase 1.5 Find It UX polish and Phase 1.6 deployment/PWA readiness are complete. The loop has been manually validated against the remote Supabase development project, including cross-user RLS isolation. Lint, type checking, unit/domain tests, and the production build pass automatically. The local-oriented pgTAP database suite has not yet been executed.
+**Implementation and validation status:** Find It, including Alias-Aware Recall, is complete and production validated. The Phase 1 code implements the MUST HAVE save/find/edit loop with user-only ownership, email/password Supabase Auth, current placement only, generic hierarchical locations, blocked non-empty location deletion, explicit item hard-delete, and deterministic canonical/alias-aware partial search. Alias-Aware Recall adds owner-managed alias add/remove on Item Edit, canonical-first ranking, per-item deduplication, current full-path results, and alias-only match explanations. Alias normalization V1 trims/collapses display whitespace, applies NFC/lowercase normalization in the application boundary, preserves punctuation and Romanian diacritics, and does not transliterate or unaccent. Phase 1.5 Find It UX polish and Phase 1.6 deployment/PWA readiness are complete. Remote foundation/search smoke tests and production iPhone functional/visual QA passed, including add, search, and remove alias flows. Lint, type checking, unit/domain tests, and the production build pass automatically. The local-oriented pgTAP database suite has not yet been executed.
 
 ### Core success story
 
@@ -50,7 +50,7 @@ Priority labels:
 - Create an item with a name and assign it to one location.
 - View an item's current full location path.
 - Edit an item, change its location, and archive/delete it with clear behavior.
-- Search the user's active items by normalized name using deterministic database/application logic.
+- Search the user's active items by normalized canonical name and owner-managed aliases using deterministic database/application logic, with canonical results ranked before alias-only results.
 - Display fast, clear results with the current location path.
 - Enforce authentication and ownership on every item and location operation.
 - Handle empty, duplicate-name, missing-location, and not-found states clearly.
@@ -60,8 +60,6 @@ This boundary permits a small optional text note only if it does not complicate 
 
 ### SHOULD HAVE
 
-- User-managed aliases for common alternate names.
-- Simple partial/text matching after exact and alias matching.
 - A lightweight recent-items or recent-search convenience.
 - Movement history if user testing shows that knowing a previous location is important to trust.
 - A polished reassignment flow when changing or removing locations that contain items or child locations.
@@ -70,9 +68,9 @@ This boundary permits a small optional text note only if it does not complicate 
 ### LATER
 
 - Photo-based multi-object detection and review.
+- Alias creation during initial item creation, alias editing-in-place, or automatic alias suggestions.
 - AI-generated aliases, categories, brands, or model guesses.
-- Fuzzy matching beyond demonstrated need.
-- Semantic/vector search.
+- Fuzzy matching, transliteration/unaccent behavior, or semantic/vector search beyond demonstrated need.
 - LLM-assisted ambiguous-query interpretation.
 - Bulk imports, barcode scanning, OCR, offline synchronization, or advanced sharing.
 - Cross-module “you already own this” intelligence.

@@ -40,7 +40,7 @@ The RX LifeOS shell runs locally, exposes its two placeholder modules through a 
 
 ## Phase 1 — Find It MVP
 
-**Status:** Implemented and operationally validated against the remote Supabase development project. Email/password authentication, the authenticated save/find/edit/move workflow, deterministic search with full paths, safe non-empty location deletion, and cross-user RLS isolation passed manual validation. Phase 1.5 Find It UX polish and Phase 1.6 deployment/PWA readiness are complete. Automated lint, type checking, unit/domain tests, and the production build pass. The local-oriented pgTAP database suite has not yet been executed.
+**Status:** Implemented and production validated. Email/password authentication, the authenticated save/find/edit/move workflow, deterministic canonical and alias-aware partial search with full paths, safe non-empty location deletion, and cross-user RLS isolation passed manual validation. Find It Alias-Aware Recall is complete: owner-managed alias add/remove, canonical-first ranking, deterministic deduplication, and compact alias-only match explanations passed remote smoke testing and production iPhone functional/visual QA. Phase 1.5 Find It UX polish and Phase 1.6 deployment/PWA readiness are complete. Automated lint, type checking, unit/domain tests, and the production build pass. The local-oriented pgTAP database suite has not yet been executed.
 
 ### Objective
 
@@ -52,7 +52,7 @@ Make the promise **“I saved where something is, and later RX LifeOS helped me 
 - Location create, rename, move, and safe archive/delete behavior.
 - Item create, view, edit, move, and archive/delete behavior.
 - Current item placement and full-path display.
-- Deterministic canonical-name and alias-aware partial search, user-managed alias add/remove on Item Edit, and compact alias-only match explanations. Alias creation during initial item creation and alias editing-in-place remain deferred.
+- Deterministic canonical-name and alias-aware partial search, user-managed alias add/remove on Item Edit, canonical-first ranking, and compact alias-only match explanations. Alias normalization V1 preserves punctuation and diacritics; transliteration/unaccent behavior is not implemented. Alias creation during initial item creation, alias editing-in-place, and automatic alias suggestions remain deferred.
 - Mobile-first save, organize, search, and result flows.
 - Clear empty, duplicate-name, missing-location, and not-found states.
 - Authorization/RLS, hierarchy invariant, domain, and critical end-to-end tests.

@@ -2,11 +2,11 @@
 
 **Your everyday operating system.**
 
-RX LifeOS is a modular quality-of-life application. **Find It** (including Phase 1.5 UX polish and Phase 1.6 deployment/PWA readiness) and the **Phase 2 Buy Later MVP** are operationally validated against the remote Supabase development project. Find It supports private location hierarchies and current-location recall; Buy Later supports deliberate purchase reconsideration, production-validated Share Intake, and live Web Push reminders. Both use Supabase Auth and PostgreSQL.
+RX LifeOS is a modular quality-of-life application. **Find It** (including Alias-Aware Recall, Phase 1.5 UX polish, and Phase 1.6 deployment/PWA readiness) and the **Phase 2 Buy Later MVP** are production validated. Find It supports private location hierarchies, current-location recall, and owner-managed aliases with deterministic alias-aware search; Buy Later supports deliberate purchase reconsideration, production-validated Share Intake, and live Web Push reminders. Both use Supabase Auth and PostgreSQL.
 
 Current modules:
 
-- **Find It** — know where everything is. The first MVP is implemented.
+- **Find It** — know where everything is. The first MVP and Alias-Aware Recall are complete and production validated.
 - **Buy Later** — save it now, decide later. Its manual save, reconsider, resolve, and history loop is operationally validated.
 
 ## Local development
@@ -75,6 +75,7 @@ Phase 1 validation status:
 
 - **Automatically validated:** lint, TypeScript type checking, unit/domain tests, and the production build.
 - **Manually validated against the remote Supabase development project:** email/password sign-up and sign-in, authenticated Find It access, root and nested location hierarchy CRUD exercised in the tested workflow, item CRUD and movement exercised in the tested workflow, deterministic partial search, complete location paths, non-empty location deletion protection, and cross-user data isolation through RLS.
+- **Production validated:** owner-managed alias add/remove on Item Edit, canonical and alias-aware partial search, canonical-first ranking, alias-only match explanations, deterministic deduplication, current location paths, and iPhone PWA visual/functional behavior. Alias normalization preserves Romanian diacritics; it does not transliterate or unaccent them.
 - **Not yet executed:** the repository's [pgTAP database test suite](supabase/tests/find_it_rls.test.sql).
 
 Phase 2 validation status:

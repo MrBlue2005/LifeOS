@@ -967,6 +967,15 @@ h2 {
   white-space: nowrap;
 }
 
+.result-item-copy > .result-alias-match {
+  overflow: visible;
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 650;
+  text-overflow: clip;
+  white-space: normal;
+}
+
 .result-path {
   display: flex;
   min-width: 0;
@@ -1694,6 +1703,114 @@ h2 {
 .item-form-actions .primary-button {
   min-height: 3.25rem;
   border-radius: 0.8rem;
+}
+
+.item-aliases {
+  display: grid;
+  gap: 0.85rem;
+  border-top: 1px solid var(--color-border);
+  margin-top: 1.45rem;
+  padding-top: 1.35rem;
+}
+
+.item-aliases-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.item-aliases-heading h2 {
+  margin: 0.2rem 0 0;
+  font-size: 1rem;
+}
+
+.item-aliases-heading p:not(.section-kicker),
+.alias-empty {
+  margin: 0.3rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.86rem;
+}
+
+.item-aliases-heading > span {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.item-alias-list {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item-alias-list li {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--color-surface-elevated) 62%, transparent);
+  padding: 0.45rem 0.45rem 0.45rem 0.75rem;
+}
+
+.item-alias-list li > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.item-alias-list .danger-button {
+  min-height: 2.75rem;
+  padding-inline: 0.8rem;
+  font-size: 0.8rem;
+}
+
+.add-alias-form {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.add-alias-form > label {
+  color: var(--color-text);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.add-alias-form > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.55rem;
+}
+
+.add-alias-form input {
+  min-width: 0;
+  min-height: 3rem;
+}
+
+.add-alias-form .primary-button {
+  min-height: 3rem;
+  padding-inline: 0.9rem;
+}
+
+.alias-feedback {
+  margin: 0;
+  color: var(--color-success);
+  font-size: 0.84rem;
+}
+
+@media (max-width: 22rem) {
+  .add-alias-form > div {
+    grid-template-columns: 1fr;
+  }
+
+  .add-alias-form .primary-button {
+    width: 100%;
+  }
 }
 
 .location-picker-dialog {

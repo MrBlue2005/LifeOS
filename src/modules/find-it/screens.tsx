@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ConfigurationRequired } from "@/core/components/configuration-required";
+import { AliasManager } from "./components/alias-manager";
 import { DeleteItemForm } from "./components/delete-item-form";
 import {
   ChevronIcon,
@@ -16,6 +17,7 @@ import { LocationManager } from "./components/location-manager";
 import {
   getItemById,
   listItems,
+  listItemAliases,
   listLocations,
   searchItems,
 } from "./data/queries";
@@ -63,8 +65,9 @@ export async function FindItHomeScreen({
         ),
     listLocations(userId),
   ]);
-  const results = searchResults.map(({ item }) => ({
+  const results = searchResults.map(({ item, match }) => ({
     item,
+    match,
     locationPath: getLocationPath(item.locationId, locations),
   }));
 
@@ -179,7 +182,7 @@ export async function FindItHomeScreen({
           </div>
           {results.length ? (
             <ul className="find-it-result-list">
-              {results.map(({ item, locationPath }) => (
+              {results.map(({ item, locationPath, match }) => (
                 <li key={item.id}>
                   <Link href={`/find-it/items/${item.id}`}>
                     <span className="result-item-mark" aria-hidden="true">
@@ -188,6 +191,11 @@ export async function FindItHomeScreen({
                     <span className="result-item-copy">
                       <strong>{item.name}</strong>
                       {item.description ? <span>{item.description}</span> : null}
+                      {match.kind === "alias" ? (
+                        <span className="result-alias-match">
+                          Matched alias: {match.matchedAlias}
+                        </span>
+                      ) : null}
                       <span className="result-path">
                         <LocationIcon />
                         {formatLocationPath(locationPath)}
@@ -325,9 +333,10 @@ export async function ItemDetailScreen({
     notFound();
   }
 
-  const [item, locations] = await Promise.all([
+  const [item, locations, aliases] = await Promise.all([
     getItemById(userId, itemId),
     listLocations(userId),
+    listItemAliases(userId, itemId),
   ]);
 
   if (!item) {
@@ -361,6 +370,7 @@ export async function ItemDetailScreen({
       <section className="item-editor-card" aria-labelledby="edit-item-title">
         <h2 className="visually-hidden" id="edit-item-title">Edit or move this item</h2>
         <ItemForm item={item} locationEntries={entries} />
+        <AliasManager aliases={aliases} itemId={item.id} />
       </section>
       <DeleteItemForm itemId={item.id} itemName={item.name} />
     </div>

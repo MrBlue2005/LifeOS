@@ -9,6 +9,7 @@ type SubmitButtonProps = Readonly<{
   pendingLabel: string;
   tone?: "primary" | "danger";
   disabled?: boolean;
+  ariaLabel?: string;
 }>;
 
 export function SubmitButton({
@@ -16,6 +17,7 @@ export function SubmitButton({
   pendingLabel,
   tone = "primary",
   disabled = false,
+  ariaLabel,
 }: SubmitButtonProps) {
   const { pending } = useFormStatus();
 
@@ -23,6 +25,7 @@ export function SubmitButton({
     <button
       className={tone === "danger" ? "danger-button" : "primary-button"}
       disabled={disabled || pending}
+      aria-label={ariaLabel}
       type="submit"
     >
       {pending ? pendingLabel : label}

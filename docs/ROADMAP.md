@@ -52,7 +52,7 @@ Make the promise **“I saved where something is, and later RX LifeOS helped me 
 - Location create, rename, move, and safe archive/delete behavior.
 - Item create, view, edit, move, and archive/delete behavior.
 - Current item placement and full-path display.
-- Deterministic canonical-name and alias-aware partial search; alias CRUD UI remains deferred.
+- Deterministic canonical-name and alias-aware partial search, user-managed alias add/remove on Item Edit, and compact alias-only match explanations. Alias creation during initial item creation and alias editing-in-place remain deferred.
 - Mobile-first save, organize, search, and result flows.
 - Clear empty, duplicate-name, missing-location, and not-found states.
 - Authorization/RLS, hierarchy invariant, domain, and critical end-to-end tests.

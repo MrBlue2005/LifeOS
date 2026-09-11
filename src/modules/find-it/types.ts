@@ -17,6 +17,13 @@ export type FindItItem = Readonly<{
   updatedAt: string;
 }>;
 
+export type FindItItemAlias = Readonly<{
+  id: string;
+  itemId: string;
+  alias: string;
+  createdAt: string;
+}>;
+
 export type LocationTreeEntry = Readonly<{
   location: FindItLocation;
   depth: number;

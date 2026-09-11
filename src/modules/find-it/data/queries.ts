@@ -10,6 +10,7 @@ import {
 } from "./search-results";
 import type {
   FindItItem,
+  FindItItemAlias,
   FindItItemSearchResult,
   FindItLocation,
 } from "../types";
@@ -51,6 +52,20 @@ function mapItem(row: {
     locationId: row.location_id,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+  };
+}
+
+function mapAlias(row: {
+  id: string;
+  item_id: string;
+  alias: string;
+  created_at: string;
+}): FindItItemAlias {
+  return {
+    id: row.id,
+    itemId: row.item_id,
+    alias: row.alias,
+    createdAt: row.created_at,
   };
 }
 
@@ -151,6 +166,26 @@ export async function searchItems(
     aliasRows,
     aliasItems,
   );
+}
+
+export async function listItemAliases(
+  userId: string,
+  itemId: string,
+): Promise<FindItItemAlias[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("find_it_item_aliases")
+    .select("id,item_id,alias,created_at")
+    .eq("user_id", userId)
+    .eq("item_id", itemId)
+    .order("alias", { ascending: true })
+    .order("id", { ascending: true });
+
+  if (error) {
+    throw new Error("Could not load aliases.");
+  }
+
+  return data.map(mapAlias);
 }
 
 export async function getItemById(

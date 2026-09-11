@@ -8,6 +8,7 @@ import { createSupabaseServerClient } from "@/core/supabase/server";
 import { wouldCreateLocationCycle } from "./domain/hierarchy";
 import {
   isUuid,
+  validateFindItAlias,
   type ItemInput,
   type LocationInput,
   validateItemInput,
@@ -16,10 +17,29 @@ import {
 import { listLocations } from "./data/queries";
 import type { FindItActionState } from "./types";
 
+export type FindItAliasActionState = Readonly<{
+  status: "idle" | "error" | "success";
+  message: string;
+  values: Readonly<Record<string, string>>;
+}>;
+
+export const initialFindItAliasActionState: FindItAliasActionState = {
+  status: "idle",
+  message: "",
+  values: {},
+};
+
 function actionError(
   message: string,
   values: Readonly<Record<string, string>> = {},
 ): FindItActionState {
+  return { status: "error", message, values };
+}
+
+function aliasActionError(
+  message: string,
+  values: Readonly<Record<string, string>> = {},
+): FindItAliasActionState {
   return { status: "error", message, values };
 }
 
@@ -372,4 +392,108 @@ export async function deleteItemAction(
 
   revalidatePath("/find-it");
   redirect("/find-it?notice=item-deleted");
+}
+
+export async function addItemAliasAction(
+  _previousState: FindItAliasActionState,
+  formData: FormData,
+): Promise<FindItAliasActionState> {
+  const itemId = formData.get("itemId");
+  const aliasValue = formData.get("alias");
+
+  if (typeof itemId !== "string" || !isUuid(itemId)) {
+    return aliasActionError("Choose a valid item.");
+  }
+
+  const context = await getActionContext();
+
+  if (!context) {
+    return aliasActionError("Your session has expired. Sign in and try again.");
+  }
+
+  const { data: item, error: itemError } = await context.supabase
+    .from("find_it_items")
+    .select("id,name")
+    .eq("user_id", context.user.id)
+    .eq("id", itemId)
+    .maybeSingle();
+
+  if (itemError || !item) {
+    return aliasActionError("That item no longer exists.");
+  }
+
+  const input = validateFindItAlias(
+    typeof aliasValue === "string" ? aliasValue : "",
+    item.name,
+  );
+
+  if (!input.success) {
+    return aliasActionError(input.message, input.values);
+  }
+
+  const { error } = await context.supabase.from("find_it_item_aliases").insert({
+    alias: input.data.alias,
+    item_id: itemId,
+    user_id: context.user.id,
+  });
+
+  if (error) {
+    if (error.code === "23505") {
+      return aliasActionError("That alias is already saved for this item.", {
+        alias: input.data.alias,
+      });
+    }
+
+    if (error.code === "23514") {
+      return aliasActionError("You can add up to 12 aliases per item.", {
+        alias: input.data.alias,
+      });
+    }
+
+    return aliasActionError("Could not add the alias.", { alias: input.data.alias });
+  }
+
+  revalidatePath("/find-it");
+  revalidatePath(`/find-it/items/${itemId}`);
+  return { status: "success", message: "Alias added.", values: {} };
+}
+
+export async function removeItemAliasAction(
+  _previousState: FindItAliasActionState,
+  formData: FormData,
+): Promise<FindItAliasActionState> {
+  const itemId = formData.get("itemId");
+  const aliasId = formData.get("aliasId");
+
+  if (
+    typeof itemId !== "string" ||
+    typeof aliasId !== "string" ||
+    !isUuid(itemId) ||
+    !isUuid(aliasId)
+  ) {
+    return aliasActionError("Choose a valid alias to remove.");
+  }
+
+  const context = await getActionContext();
+
+  if (!context) {
+    return aliasActionError("Your session has expired. Sign in and try again.");
+  }
+
+  const { data, error } = await context.supabase
+    .from("find_it_item_aliases")
+    .delete()
+    .eq("user_id", context.user.id)
+    .eq("item_id", itemId)
+    .eq("id", aliasId)
+    .select("id")
+    .maybeSingle();
+
+  if (error || !data) {
+    return aliasActionError("That alias no longer exists or is unavailable.");
+  }
+
+  revalidatePath("/find-it");
+  revalidatePath(`/find-it/items/${itemId}`);
+  return { status: "success", message: "Alias removed.", values: {} };
 }

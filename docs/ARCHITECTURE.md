@@ -171,7 +171,7 @@ Find It search should advance only as observed needs justify it:
 
 After an item is identified, location retrieval is a normal authorized database query. Do not send the user's inventory wholesale to an LLM.
 
-The repository's Find It search uses escaped, case-insensitive partial `ILIKE` matching on canonical item names and owner-scoped normalized aliases. Canonical matches rank before alias-only matches; each group orders by `updated_at DESC, id ASC`, and the combined result set is capped at 50 items. Alias rows are fetched separately, their matching items are fetched in one batch, and duplicate item IDs collapse in application code. If multiple aliases match one item, the first database-ordered normalized alias (then alias-row ID) is retained as internal match metadata for future presentation; it is not displayed yet. The server loads the authenticated user's location rows and derives each result's complete current path with bounded application-side parent traversal. No path cache, full-text index, fuzzy matching, vectors, or AI is present. Alias CRUD UI remains deferred.
+The repository's Find It search uses escaped, case-insensitive partial `ILIKE` matching on canonical item names and owner-scoped normalized aliases. Canonical matches rank before alias-only matches; each group orders by `updated_at DESC, id ASC`, and the combined result set is capped at 50 items. Alias rows are fetched separately, their matching items are fetched in one batch, and duplicate item IDs collapse in application code. If multiple aliases match one item, the first database-ordered normalized alias (then alias-row ID) is retained as match metadata; alias-only result rows display that one matched alias while canonical matches do not add redundant metadata. The server loads the authenticated user's location rows and derives each result's complete current path with bounded application-side parent traversal. An item's edit screen supports owner-scoped alias add/remove in a separate form, so unsaved canonical-item edits are not submitted or discarded by alias changes. Aliases are validated against the current saved canonical name; item renames and moves do not rewrite existing aliases. Alias creation during initial item creation and alias editing-in-place remain deferred. No path cache, full-text index, fuzzy matching, vectors, or AI is present.
 
 ## AI gateway
 
@@ -309,7 +309,7 @@ These decisions should be made before the related implementation, not guessed no
 5. **Price tracking:** supported merchants/methods, legal and Terms of Service review, reliability target, and cost ceiling before any automation.
 6. **Deployment regions and data residency:** driven by target users and privacy obligations.
 7. **Deletion/export requirements:** exact account, module-data, image, and derived-record lifecycle before production launch.
-8. **Find It evolution:** whether observed use justifies aliases, movement history, or non-AI photo attachments after the manual save/find loop is validated.
+8. **Find It evolution:** whether observed use justifies movement history or non-AI photo attachments after the manual save/find loop is validated. Alias management is implemented; initial-create aliases, alias editing-in-place, fuzzy/semantic search, AI-generated aliases, tags/categories, and cross-module matching remain deferred.
 
 ## Rejected for the current architecture
 

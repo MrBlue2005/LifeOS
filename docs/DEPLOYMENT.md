@@ -1,5 +1,9 @@
 # RX LifeOS deployment and PWA readiness
 
+## V1 release status
+
+RX LifeOS V1 is **ready**, **production validated**, and validated in real installed-iPhone PWA workflows. This includes Find It and Buy Later core flows, Share Intake, Web Push reminders, safe auth returns, mobile touch targets, active module navigation semantics, and iOS editable-control zoom prevention. Coverage is meaningful but not exhaustive across all devices and browsers.
+
 ## Deployment shape
 
 RX LifeOS deploys as one Next.js application on Vercel. It uses Supabase Auth and PostgreSQL through the existing server-side, cookie-based clients. Authenticated requests use the Supabase publishable key and remain constrained by Row Level Security. The automatic Buy Later scheduler alone uses a server-only service-role key for its narrow claim and delivery boundary; it is never accepted from a client request or exposed to client code.
@@ -133,7 +137,7 @@ The application includes:
 - a 180px Apple touch icon and Apple standalone metadata;
 - safe-area inset handling and dynamic viewport-height support.
 
-HTTPS from Vercel satisfies the secure-origin requirement. A custom service worker is intentionally absent because current installability does not require one and RX LifeOS has no approved offline behavior. Private authenticated data is therefore not intentionally cached for offline use.
+HTTPS from Vercel satisfies the secure-origin requirement. RX LifeOS uses a narrow push-only service worker for reminder display and safe Buy Later deep links; it has no fetch handler, offline cache, or background synchronization. Private authenticated data is therefore not intentionally cached for offline use.
 
 On iPhone, open the production URL in Safari, use **Share → Add to Home Screen**, confirm the RX LifeOS title, and launch it from the new icon. Browser and iOS versions vary; installation is a launcher/standalone experience, not an offline guarantee. An active network connection is required for authentication and Find It data.
 

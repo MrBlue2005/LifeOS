@@ -8,6 +8,16 @@
 - Every phase must preserve data ownership, module independence, and the rule that AI is not application memory.
 - Later work requires evidence of user value and a proportionate review of privacy, security, reliability, maintenance, and cost.
 
+## V1 release closeout
+
+**Status: READY — production validated and validated in real installed-iPhone PWA workflows.** V1 includes Find It location/item recall with alias-aware deterministic search, Buy Later's save, wait, reminder, reconsider, decide, and history loop, authenticated Share Intake with title-only enrichment, Supabase authentication/RLS, and the shared mobile PWA shell.
+
+Final V1 polish covers safe auth return paths, accurate Product link guidance, mobile touch targets, active module navigation semantics, and iOS editable-control zoom prevention. Validation is meaningful but not exhaustive across device and browser combinations. The local Supabase pgTAP suites remain unexecuted where Docker/Podman local Supabase is unavailable; this is non-blocking because the shipped remote RLS/runtime validation was completed.
+
+## Usage / Evidence Mode
+
+V1 feature development is closed. Do not begin a new roadmap feature merely because it is plausible. Start another development cycle only for recurring real-user friction, observed repeated workflow cost, a production defect, or evidence that a bounded change materially reduces effort while preserving privacy and operating-cost discipline.
+
 ## Phase 0 — Foundation
 
 ### Objective
@@ -121,6 +131,8 @@ Target users consolidate real purchase intentions and complete scheduled reconsi
 ### Objective
 
 Evaluate and, only if validated, introduce narrowly useful collaboration between independently successful modules.
+
+**Status: NO-GO pending evidence.** Phase 3 may proceed only when a recurring problem materially benefits from intelligence or cross-module behavior, cannot be solved better with deterministic UX, materially reduces user effort, has a clear privacy model, and has a bounded cost and operational model.
 
 ### Major deliverables
 

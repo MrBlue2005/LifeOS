@@ -2,7 +2,9 @@
 
 ## Status and intent
 
-This document proposes the initial architecture for RX LifeOS. It establishes boundaries and safe defaults; it is not an implementation specification. Decisions with meaningful cost, privacy, or scope impact remain explicitly open until evidence is available.
+This document establishes the implemented V1 architecture and its safe extension boundaries. V1 is production validated, including real installed-iPhone PWA workflows, but that validation is not exhaustive across devices or browsers. Feature development is closed pending Usage / Evidence Mode evidence; decisions with meaningful cost, privacy, or scope impact remain explicitly open until evidence is available.
+
+The local Supabase pgTAP suites remain unexecuted where Docker/Podman local Supabase is unavailable. This is non-blocking for V1: remote RLS and runtime validation was completed for shipped work.
 
 ## Architectural goals
 

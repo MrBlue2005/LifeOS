@@ -12,6 +12,12 @@ RX LifeOS is a modular quality-of-life application: one coherent personal utilit
 
 It exists because recurring personal tasks are often handled through scattered notes, screenshots, bookmarks, memory, and disconnected apps. RX LifeOS turns those recurring problems into reliable, low-friction workflows without becoming a crowded general-purpose dashboard.
 
+## V1 release status
+
+RX LifeOS V1 is **ready**, **production validated**, and validated in installed iPhone PWA workflows. The validation covers the shipped Find It and Buy Later loops, including iPhone-specific polish, but is not exhaustive across every device or browser.
+
+V1 feature development is closed. The product is now in **Usage / Evidence Mode**: future work must be justified by recurring real-user friction, observed workflow repetition, production defects, or a clear reduction in user effort.
+
 ## Current product
 
 ### Product promise

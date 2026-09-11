@@ -4,6 +4,10 @@
 
 RX LifeOS is a modular quality-of-life application. **Find It** (including Alias-Aware Recall, Phase 1.5 UX polish, and Phase 1.6 deployment/PWA readiness) and the **Phase 2 Buy Later MVP** are production validated. Find It supports private location hierarchies, current-location recall, and owner-managed aliases with deterministic alias-aware search; Buy Later supports deliberate purchase reconsideration, production-validated Share Intake, and live Web Push reminders. Both use Supabase Auth and PostgreSQL.
 
+## Current state
+
+**V1 is ready, production validated, and validated in installed iPhone PWA workflows.** This is not a claim of exhaustive device or browser coverage. V1 feature development is closed; RX LifeOS is now in **Usage / Evidence Mode**, where new work must respond to recurring real-user friction, a production defect, or demonstrated effort reduction.
+
 Current modules:
 
 - **Find It** — know where everything is. The first MVP and Alias-Aware Recall are complete and production validated.

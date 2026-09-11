@@ -10,6 +10,12 @@ Priority labels:
 - **SHOULD HAVE:** high-value follow-up once the core loop is stable; may ship within an MVP iteration but cannot delay proving the core loop.
 - **LATER:** intentionally excluded from the initial MVP boundary.
 
+## V1 release status
+
+V1 is **ready**, **production validated**, and validated in real installed-iPhone PWA workflows. The shipped scope is Find It location/item recall with alias-aware search, and Buy Later's save, wait, reminder, reconsider, decide, and history loop, including authenticated Share Intake and title-only enrichment. Shared Core supplies Supabase authentication, RLS-backed ownership, safe auth returns, the PWA shell, Web Push, and mobile accessibility polish.
+
+This validation is not exhaustive across devices or browsers. V1 feature development is closed; future scope moves only through Usage / Evidence Mode and the roadmap advancement gates.
+
 ## Shared foundation
 
 ### MUST HAVE
@@ -87,7 +93,7 @@ Photo recognition is not required to prove the Find It MVP. It may enter only af
 
 ## Buy Later MVP — follows Find It
 
-**Implementation and validation status:** The Phase 2 MVP migration is applied to the linked remote Supabase development project, with local and remote history synchronized through `20260908170000_create_buy_later_notifications.sql`. Manual purchase-intention entry, optional URL/price/currency/note, Waiting and Due states, explicit rescheduling, purchased/dismissed outcomes, history, separate permanent deletion, and cross-user RLS isolation passed live validation. Reconsideration presets and custom dates also passed real-iPhone LAN validation. Phase 2.6 authenticated Share Intake, Phase 2.7 metadata title enrichment, and Phase 2.8 URL slug fallback are complete, deployed, and production-validated through the iPhone Apple Shortcut flow. Phase 2.10A persistence/security policy passed remote RLS smoke validation. The local-oriented Buy Later pgTAP suite has not yet been executed.
+**Implementation and validation status:** The Phase 2 MVP and notification migrations are applied to the linked remote Supabase development project, with local and remote history synchronized through `20260910190000_fix_buy_later_reminder_conflict_target.sql`. Manual purchase-intention entry, optional URL/price/currency/note, Waiting and Due states, explicit rescheduling, purchased/dismissed outcomes, history, separate permanent deletion, and cross-user RLS isolation passed live validation. Reconsideration presets and custom dates also passed real-iPhone LAN validation. Phase 2.6 authenticated Share Intake, Phase 2.7 metadata title enrichment, and Phase 2.8 URL slug fallback are complete, deployed, and production-validated through the iPhone Apple Shortcut flow. Phase 2.10A persistence/security policy passed remote RLS smoke validation. The local-oriented Buy Later pgTAP suite has not yet been executed.
 
 **Phase 2.10B implementation:** `20260908180000_add_buy_later_push_mutations.sql` is applied to the linked remote project. The Buy Later Home has explicit Web Push opt-in, a narrow push-only service worker, browser subscription registration, authenticated owner-scoped persistence, browser timezone capture, lock-screen item-name privacy control, and user-level disable. Permission is never requested on load. The public VAPID key is configured through `NEXT_PUBLIC_WEB_PUSH_VAPID_PUBLIC_KEY`; its private counterpart is not in the application.
 

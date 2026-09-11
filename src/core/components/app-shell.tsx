@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { signOutAction } from "@/core/auth/actions";
 import { getAuthenticatedUser } from "@/core/auth/session";
+import { ModuleNavigation } from "@/core/components/module-navigation";
 import { moduleRegistry } from "@/core/modules/registry";
 
 type AppShellProps = Readonly<{
@@ -25,13 +26,7 @@ export async function AppShell({ children }: AppShellProps) {
         </Link>
 
         <div className="header-actions">
-          <nav className="module-nav" aria-label="RX LifeOS modules">
-            {moduleRegistry.map((moduleDefinition) => (
-              <Link href={moduleDefinition.href} key={moduleDefinition.id}>
-                {moduleDefinition.name}
-              </Link>
-            ))}
-          </nav>
+          <ModuleNavigation modules={moduleRegistry} />
 
           {user ? (
             <form className="account-action" action={signOutAction}>

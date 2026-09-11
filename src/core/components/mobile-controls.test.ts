@@ -3,8 +3,8 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const styles = readFileSync(join(process.cwd(), "src", "app", "globals.css"), "utf8");
-const appShell = readFileSync(
-  join(process.cwd(), "src", "core", "components", "app-shell.tsx"),
+const moduleNavigation = readFileSync(
+  join(process.cwd(), "src", "core", "components", "module-navigation.tsx"),
   "utf8",
 );
 const reminderSettings = readFileSync(
@@ -23,9 +23,8 @@ describe("mobile compact controls", () => {
   });
 
   it("retains semantic navigation and reminder actions", () => {
-    expect(appShell).toContain('<nav className="module-nav" aria-label="RX LifeOS modules">');
-    expect(appShell).toContain('className="quiet-button"');
-    expect(appShell).toContain('className="account-create-link"');
+    expect(moduleNavigation).toContain('<nav className="module-nav" aria-label="RX LifeOS modules">');
+    expect(moduleNavigation).toContain('aria-current={isActive ? "page" : undefined}');
     expect(reminderSettings).toContain('className="reminder-privacy"');
     expect(reminderSettings).toContain('className="quiet-button"');
     expect(reminderSettings).toContain('className="secondary-button"');

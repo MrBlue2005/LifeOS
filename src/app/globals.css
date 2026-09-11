@@ -185,6 +185,12 @@ button:focus-visible {
   color: var(--color-text);
 }
 
+.module-nav a[aria-current="page"] {
+  box-shadow: inset 0 -2px 0 var(--color-primary);
+  background: var(--color-primary-muted);
+  color: var(--color-text-soft);
+}
+
 .header-actions {
   display: flex;
   align-items: center;

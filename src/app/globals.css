@@ -2285,6 +2285,13 @@ h2 {
 .reminder-privacy small { color: var(--color-text-muted); font-size: 0.82rem; }
 
 @media (hover: none) and (pointer: coarse) {
+  .field input,
+  .field textarea,
+  .field select,
+  .add-alias-form input {
+    font-size: 1rem;
+  }
+
   .module-nav a,
   .quiet-button,
   .account-create-link,

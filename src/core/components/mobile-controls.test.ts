@@ -22,6 +22,14 @@ describe("mobile compact controls", () => {
     expect(styles).toContain("min-height: 2.75rem;");
   });
 
+  it("keeps editable mobile form controls at the iOS zoom-safe size", () => {
+    expect(styles).toContain(".field input,");
+    expect(styles).toContain(".field textarea,");
+    expect(styles).toContain(".field select,");
+    expect(styles).toContain(".add-alias-form input {");
+    expect(styles).toContain("font-size: 1rem;");
+  });
+
   it("retains semantic navigation and reminder actions", () => {
     expect(moduleNavigation).toContain('<nav className="module-nav" aria-label="RX LifeOS modules">');
     expect(moduleNavigation).toContain('aria-current={isActive ? "page" : undefined}');

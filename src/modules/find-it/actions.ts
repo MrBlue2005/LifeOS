@@ -15,19 +15,7 @@ import {
   validateLocationInput,
 } from "./domain/validation";
 import { listLocations } from "./data/queries";
-import type { FindItActionState } from "./types";
-
-export type FindItAliasActionState = Readonly<{
-  status: "idle" | "error" | "success";
-  message: string;
-  values: Readonly<Record<string, string>>;
-}>;
-
-export const initialFindItAliasActionState: FindItAliasActionState = {
-  status: "idle",
-  message: "",
-  values: {},
-};
+import type { FindItActionState, FindItAliasActionState } from "./types";
 
 function actionError(
   message: string,

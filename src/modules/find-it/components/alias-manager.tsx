@@ -4,11 +4,13 @@ import { useActionState, useState } from "react";
 
 import {
   addItemAliasAction,
-  initialFindItAliasActionState,
   removeItemAliasAction,
-  type FindItAliasActionState,
 } from "../actions";
-import type { FindItItemAlias } from "../types";
+import {
+  initialFindItAliasActionState,
+  type FindItAliasActionState,
+  type FindItItemAlias,
+} from "../types";
 import { SubmitButton } from "./form-controls";
 
 type AliasManagerProps = Readonly<{

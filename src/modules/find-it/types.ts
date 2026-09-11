@@ -55,3 +55,15 @@ export const initialFindItActionState: FindItActionState = {
   message: "",
   values: {},
 };
+
+export type FindItAliasActionState = Readonly<{
+  status: "idle" | "error" | "success";
+  message: string;
+  values: Readonly<Record<string, string>>;
+}>;
+
+export const initialFindItAliasActionState: FindItAliasActionState = {
+  status: "idle",
+  message: "",
+  values: {},
+};

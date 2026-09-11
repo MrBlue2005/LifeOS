@@ -15,9 +15,9 @@ vi.mock("./data/queries", () => ({ listLocations: vi.fn() }));
 
 import {
   addItemAliasAction,
-  initialFindItAliasActionState,
   removeItemAliasAction,
 } from "./actions";
+import { initialFindItAliasActionState } from "./types";
 
 const itemId = "20000000-0000-4000-8000-000000000001";
 const aliasId = "40000000-0000-4000-8000-000000000001";
